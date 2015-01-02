@@ -1,0 +1,12 @@
+{
+  "name": "puppetfinland-librenms",
+  "version": "0.3.0",
+  "author": "Puppet-Finland team",
+  "license": "BSD license",
+  "summary": "Setup librenms"
+  "source": "https://github.com/Puppet-Finland/librenms.git",
+  "project_page": "https://github.com/Puppet-Finland/librenms",
+  "dependencies": [
+    { "name": "puppetfinland/mysql", "version_requirement": ">= 0.5.0" },
+  ]
+}
