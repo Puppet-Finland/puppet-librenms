@@ -47,9 +47,8 @@ class librenms::device
 
     $fullcmd = "${basecmd} ${params}"
 
-    # This command will get run on every Puppet run on every node. However, it 
-    # should be fairly cheap and the alternative (mysql + grep) is probably not 
-    # better and might break in the future.
+    # Add the node if it does not already exist in LibreNMS database. The grep 
+    # is needed to produce a meaningful return value (0 or 1).
     @@exec { "Add ${::fqdn} to librenms":
         command => "${fullcmd}",
         path => [ "${librenms_basedir}", "/bin", "/sbin", "/usr/bin", "/usr/sbin", "/usr/local/bin", "usr/local/sbin" ],
