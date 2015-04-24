@@ -31,9 +31,9 @@
 class librenms::device
 (
     $librenms_basedir = '/opt/librenms',
-    $community='',
-    $user='',
-    $pass='',
+    $community=undef,
+    $user=undef,
+    $pass=undef,
     $proto = 'v3'
 )
 {
@@ -50,10 +50,10 @@ class librenms::device
     # Add the node if it does not already exist in LibreNMS database. The grep 
     # is needed to produce a meaningful return value (0 or 1).
     @@exec { "Add ${::fqdn} to librenms":
-        command => "${fullcmd}",
-        path => [ "${librenms_basedir}", "/bin", "/sbin", "/usr/bin", "/usr/sbin", "/usr/local/bin", "usr/local/sbin" ],
-        unless => ["mysql --defaults-extra-file=/root/.my.cnf -e \"SELECT hostname FROM librenms.devices WHERE hostname = \'${fqdn}\'\"|grep ${::fqdn}"],
-        user => 'root',
-        tag => 'librenms-add_device',
+        command => $fullcmd,
+        path    => [ $librenms_basedir, '/bin', '/sbin', '/usr/bin', '/usr/sbin', '/usr/local/bin', 'usr/local/sbin' ],
+        unless  => ["mysql --defaults-extra-file=/root/.my.cnf -e \"SELECT hostname FROM librenms.devices WHERE hostname = \'${::fqdn}\'\"|grep ${::fqdn}"],
+        user    => 'root',
+        tag     => 'librenms-add_device',
     }
 }
