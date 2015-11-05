@@ -14,6 +14,10 @@
 #
 # == Parameters
 #
+# [*manage*]
+#   Whether to add this node to LibreNMS. Valid values are true (default) and 
+#   false. You probably want to set this to false if you're including this class 
+#   on test nodes.
 # [*librenms_basedir*]
 #   The directory into which LibreNMS is installed on the server side. Defaults 
 #   to '/opt/librenms'.
@@ -30,6 +34,7 @@
 #
 class librenms::device
 (
+    $manage=true,
     $librenms_basedir = '/opt/librenms',
     $community=undef,
     $user=undef,
@@ -37,6 +42,10 @@ class librenms::device
     $proto = 'v3'
 )
 {
+    validate_bool($manage)
+
+    if $manage {
+
     $basecmd = "${librenms_basedir}/addhost.php ${::fqdn}"
 
     case $proto {
@@ -55,5 +64,6 @@ class librenms::device
         unless  => ["mysql --defaults-extra-file=/root/.my.cnf -e \"SELECT hostname FROM librenms.devices WHERE hostname = \'${::fqdn}\'\"|grep ${::fqdn}"],
         user    => 'root',
         tag     => 'librenms-add_device',
+    }
     }
 }
