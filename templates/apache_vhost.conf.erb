@@ -1,0 +1,12 @@
+<VirtualHost *:80>
+  DocumentRoot <%= @basedir %>/html/
+  ServerName <%= @server_name %>
+  CustomLog <%= @basedir %>/logs/access_log combined
+  ErrorLog <%= @basedir %>/logs/error_log
+  AllowEncodedSlashes NoDecode
+  <Directory "<%= @basedir %>/html/">
+    Require all granted
+    AllowOverride All
+    Options FollowSymLinks MultiViews
+  </Directory>
+</VirtualHost>
