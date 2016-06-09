@@ -18,10 +18,10 @@ class librenms::config {
     }
 
     # enable php5-crypt module
-    exec { "enablemcrypt":
-        path    => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ],
-        command => "php5enmod mcrypt",
-        unless  => "find /etc/php5/apache2 -type l -name '*mcrypt.ini' | grep ini",
+    exec { 'enablemcrypt':
+        path    => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ],
+        command => 'php5enmod mcrypt',
+        unless  => 'find /etc/php5/apache2 -type l -name \'*mcrypt.ini\' | grep ini',
         require => Class['librenms::install'],
     }
 }

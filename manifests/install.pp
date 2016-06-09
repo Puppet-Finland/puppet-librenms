@@ -15,29 +15,32 @@ class librenms::install {
         managehome => false,
         system     => true,
     }
-    -> vcsrepo {'librenms-repo-clone':
+    ->
+    vcsrepo { 'librenms-repo-clone':
         ensure   => present,
         path     => $basedir,
         provider => 'git',
         source   => $::librenms::clone_source,
     }
-    -> file {"librenms-rrd-dir":
+    ->
+    file { 'librenms-rrd-dir':
         ensure => directory,
         path   => "${basedir}/rrd",
-        mode   => "0775",
+        mode   => '0775',
         owner  => $user,
         group  => $user,
     }
-    -> file {"librenms-logs-dir":
+    ->
+    file { 'librenms-logs-dir':
         ensure => directory,
         path   => "${basedir}/logs",
-        mode   => "0775",
+        mode   => '0775',
         owner  => $user,
         group  => $user,
     }
 
     # move all files to librenms user
-    exec {'librenms-set-ownership':
+    exec { 'librenms-set-ownership':
         path        => ['/bin', '/usr/bin'],
         command     => "chown -R ${user}:${user} ${basedir}",
         refreshonly => true,
