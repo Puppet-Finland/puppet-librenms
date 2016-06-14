@@ -5,19 +5,23 @@
 #
 # <http://www.librenms.org>
 #
-# Currently this is a dummy class. The actual hard lifting is done in 
-# librenms::server and librenms::device.
-#
 class librenms
 (
     $user = 'librenms',
-    $server_name = 'librenms.local',
-    $clone_source = 'https://github.com/librenms/librenms.git',
-    $clone_target = '/opt/librenms',
-    $apache_sites_dir = '/etc/apache2/sites-enabled',
-)
+    $server_name = $::fqdn,
+    $clone_source = $::librenms::params::clone_source,
+    $clone_target = '/opt/librenms'
+
+) inherits librenms::params
 {
-    include ::librenms::install
-    include ::librenms::config
-    include ::librenms::server
+    class { '::librenms::install':
+        user         => $user,
+        clone_source => $clone_source,
+        basedir      => $clone_target,
+    }
+
+    class { '::librenms::config':
+        basedir     => $clone_target,
+        server_name => $server_name,
+    }
 }

@@ -3,10 +3,13 @@
 #
 # Handles installation of LibreNMS network monitoring tool
 #
-class librenms::install {
-    $basedir = $::librenms::clone_target
-    $user = $::librenms::user
-
+class librenms::install
+(
+    $user,
+    $clone_source,
+    $basedir
+)
+{
     # Add libreNMS user
     user {'librenms-user':
         ensure     => 'present',
@@ -58,25 +61,18 @@ class librenms::install {
         require +> [User['librenms-user'], ],
     }
 
-    $apt_requirements = ['php5-cli',
-                         'php5-mysql',
-                         'php5-gd',
-                         'php5-snmp',
-                         'php-pear',
-                         'php5-curl',
-                         'snmp',
-                         'graphviz',
-                         'php5-mcrypt',
-                         'php5-json',
-                         'fping',
-                         'imagemagick',
-                         'whois',
-                         'mtr-tiny',
-                         'nmap',
-                         'python-mysqldb',
-                         'php-net-ipv4',
-                         'php-net-ipv6',
-                         'rrdtool']
+    # Dependencies
+    include ::php
+    include ::php::gd
+    include ::php::mysql
+    include ::php::cli
+    include ::php::pear
+    include ::php::curl
+    include ::php::snmp
+    include ::php::mcrypt
+    include ::php::json
+    include ::php::net_ipv4
+    include ::php::net_ipv6
 
-    ensure_packages($apt_requirements, {'ensure' => 'present'})
+    ensure_packages($::librenms::params::dependency_packages, {'ensure' => 'present'})
 }
