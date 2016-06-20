@@ -18,3 +18,10 @@ Example usage using Hiera:
     php::config_overrides:
         date.timezone: 'Etc/UTC'
 
+
+# TODO
+
+- Ensure that all the dependencies defined correctly (run on a fresh host)
+- Remove the operating system default virtualhost
+- Add https virtualhost support
+- Add redirect from webserver root to /librenms
