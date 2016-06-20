@@ -16,13 +16,12 @@ class librenms::dbserver
 
     class { '::mysql':
         bind_address      => $bind_address,
-        use_root_defaults => true,
         sql_mode          => '',
         root_password     => $root_password,
     }
 
     class { '::mysql::config::innodb':
-        innodb_file_per_table => true,
+        file_per_table => true,
     }
 
     mysql::database { 'librenms':
