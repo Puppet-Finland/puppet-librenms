@@ -45,4 +45,6 @@ class librenms
         db_host     => $db_host,
         db_pass     => $db_pass
     }
+
+    include ::librenms::devices
 }
