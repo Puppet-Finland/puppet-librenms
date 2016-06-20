@@ -1,15 +1,16 @@
 {
   "name": "puppetfinland-librenms",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "author": "Puppet-Finland team",
   "license": "BSD license",
   "summary": "Setup librenms",
   "source": "https://github.com/Puppet-Finland/librenms.git",
   "project_page": "https://github.com/Puppet-Finland/librenms",
   "dependencies": [
-    { "name": "puppetfinland/mysql", "version_requirement": ">= 0.5.0" },
+    { "name": "puppetfinland/mysql", "version_requirement": ">= 2.1.0" },
+    { "name": "puppetfinland/apache2", "version_requirement": ">= 2.0.0" },
     { "name": "puppetfinland/os", "version_requirement": ">= 0.5.5" },
-    { "name": "puppetfinland/php", "version_requirement": ">= 2.2.0" },
+    { "name": "puppetfinland/php", "version_requirement": ">= 2.3.0" },
     { "name": "puppetlabs/stdlib", "version_requirement": ">= 4.0.0" }
   ]
 }
