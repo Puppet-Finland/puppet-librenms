@@ -41,7 +41,7 @@ class librenms::config
 
     php::module { 'mcrypt':
         ensure  => 'enabled',
-        require => Class['::librenms::install'], 
+        require => Class['::librenms::install'],
     }
 
     Exec {

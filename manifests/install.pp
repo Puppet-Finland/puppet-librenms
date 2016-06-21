@@ -17,6 +17,7 @@ class librenms::install
         home       => $basedir,
         managehome => false,
         system     => true,
+        notify     => Exec['librenms-set-ownership'],
     }
     ->
     vcsrepo { 'librenms-repo-clone':
@@ -24,6 +25,7 @@ class librenms::install
         path     => $basedir,
         provider => 'git',
         source   => $::librenms::clone_source,
+        notify   => Exec['librenms-set-ownership'],
     }
     ->
     file { 'librenms-rrd-dir':
@@ -32,6 +34,7 @@ class librenms::install
         mode   => '0775',
         owner  => $user,
         group  => $user,
+        notify => Exec['librenms-set-ownership'],
     }
     ->
     file { 'librenms-logs-dir':
@@ -40,19 +43,15 @@ class librenms::install
         mode   => '0775',
         owner  => $user,
         group  => $user,
+        notify => Exec['librenms-set-ownership'],
     }
 
     # move all files to librenms user
     exec { 'librenms-set-ownership':
-        path        => ['/bin', '/usr/bin'],
-        command     => "chown -R ${user}:${user} ${basedir}",
-        refreshonly => true,
-        subscribe   => [
-                        User['librenms-user'],
-                        Vcsrepo['librenms-repo-clone'],
-                        File['librenms-rrd-dir'],
-                        File['librenms-logs-dir'],
-                        ],
+        path    => ['/bin', '/usr/bin'],
+        command => "chown -R ${user}:${user} ${basedir}",
+        onlyif  => "find ${basedir} ! -user ${user}|grep \"${basedir}\"",
+        require => User['librenms-user'],
     }
 
     # Hack www-data to librenms group, if www-data user is defined
