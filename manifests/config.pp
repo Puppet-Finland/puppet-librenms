@@ -36,6 +36,7 @@ class librenms::config
         owner   => $system_user,
         group   => $system_user,
         content => template('librenms/config.php.erb'),
+        require => Class['::librenms::install'],
     }
 
     php::module { 'mcrypt':
