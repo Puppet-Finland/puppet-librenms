@@ -17,7 +17,8 @@ class librenms::params {
                                     'mtr-tiny',
                                     'nmap',
                                     'python-mysqldb',
-                                    'rrdtool']
+                                    'rrdtool',
+                                    'snmp']
         }
         default: {
             fail("Unsupported OS: ${::osfamily}")
