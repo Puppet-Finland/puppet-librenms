@@ -22,8 +22,10 @@ class librenms
 {
 
     class { '::apache2':
-        manage_config => false,
-        modules => { 'rewrite' => {} },
+        purge_default_sites => true,
+        modules             => {
+            'rewrite' => {}
+        },
     }
 
     include ::apache2::config::php
