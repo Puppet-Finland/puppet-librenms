@@ -26,8 +26,8 @@ class librenms::config
     file { 'librenms-apache-site-conf':
         path    => "${::librenms::params::apache_sites_dir}/librenms.conf",
         content => template('librenms/apache_vhost.conf.erb'),
-        owner  => $::os::params::adminuser,
-        group  => $::os::params::admingroup,
+        owner   => $::os::params::adminuser,
+        group   => $::os::params::admingroup,
         require => Class['::apache2::install'],
     }
 
@@ -40,7 +40,8 @@ class librenms::config
     }
 
     php::module { 'mcrypt':
-        ensure => 'enabled',
+        ensure  => 'enabled',
+        require => Class['::librenms::install'], 
     }
 
     Exec {
@@ -65,5 +66,4 @@ class librenms::config
         creates => "${basedir}/.adduser.php-ran",
         require => Exec['librenms-build-base.php'],
     }
-
 }
