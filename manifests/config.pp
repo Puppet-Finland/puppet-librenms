@@ -20,19 +20,21 @@ class librenms::config
 
     File {
         ensure => 'present',
-        owner  => $::os::params::adminuser,
-        group  => $::os::params::admingroup,
         mode   => '0755',
     }
 
     file { 'librenms-apache-site-conf':
         path    => "${::librenms::params::apache_sites_dir}/librenms.conf",
         content => template('librenms/apache_vhost.conf.erb'),
+        owner  => $::os::params::adminuser,
+        group  => $::os::params::admingroup,
         require => Class['::apache2::install'],
     }
 
     file { 'librenms-config.php':
         path    => "${basedir}/config.php",
+        owner   => $system_user,
+        group   => $system_user,
         content => template('librenms/config.php.erb'),
     }
 
