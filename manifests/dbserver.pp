@@ -15,9 +15,9 @@ class librenms::dbserver
 {
 
     class { '::mysql':
-        bind_address      => $bind_address,
-        sql_mode          => '',
-        root_password     => $root_password,
+        bind_address  => $bind_address,
+        sql_mode      => '',
+        root_password => $root_password,
     }
 
     class { '::mysql::config::innodb':
