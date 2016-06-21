@@ -66,4 +66,13 @@ class librenms::config
         creates => "${basedir}/.adduser.php-ran",
         require => Exec['librenms-build-base.php'],
     }
+
+    # Without the poller-wrapper we don't get any information from snmpd daemons
+    cron { 'librenms-poller-wrapper.py':
+        command => "${basedir}/poller-wrapper.py > /dev/null 2>&1",
+        user    => 'root',
+        minute  => '*/4',
+        require => Class['::librenms::install'],
+    }
+
 }
