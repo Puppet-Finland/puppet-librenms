@@ -44,7 +44,9 @@ For details see these classes/defines:
 
 # Dependencies
 
-See [metadata.json](metadata.json).
+This module's requirements are listed in [metadata.json](metadata.json). We 
+suggest using [puppetfinland/snmpd](https://github.com/Puppet-Finland/snmpd) for 
+setting up snmpd on LibreNMS-managed nodes.
 
 # Operating system support
 
