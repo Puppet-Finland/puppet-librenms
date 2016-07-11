@@ -19,7 +19,7 @@ Example usage using Hiera:
     php::config_overrides:
         date.timezone: 'Etc/UTC'
 
-To export a node in into LibreNMS:
+To export a node into LibreNMS:
 
     classes:
         - librenms::device
