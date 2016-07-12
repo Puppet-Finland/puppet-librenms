@@ -13,7 +13,8 @@ class librenms::config
     String  $admin_email,
             $db_user,
             $db_host,
-            $db_pass
+            $db_pass,
+    Integer $poller_threads
 
 ) inherits librenms::params
 {
@@ -69,9 +70,9 @@ class librenms::config
 
     # Without the poller-wrapper we don't get any information from snmpd daemons
     cron { 'librenms-poller-wrapper.py':
-        command => "${basedir}/poller-wrapper.py > /dev/null 2>&1",
+        command => "${basedir}/poller-wrapper.py ${poller_threads} > /dev/null 2>&1",
         user    => 'root',
-        minute  => '*/4',
+        minute  => '*/5',
         require => Class['::librenms::install'],
     }
 

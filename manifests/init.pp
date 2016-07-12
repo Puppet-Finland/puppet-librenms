@@ -17,6 +17,7 @@ class librenms
     $admin_email = $::serveradmin,
     $db_user = 'librenms',
     $db_host = 'localhost',
+    $poller_threads = 16
 
 ) inherits librenms::params
 {
@@ -37,15 +38,16 @@ class librenms
     }
 
     class { '::librenms::config':
-        system_user => $user,
-        basedir     => $clone_target,
-        server_name => $server_name,
-        admin_user  => $admin_user,
-        admin_pass  => $admin_pass,
-        admin_email => $admin_email,
-        db_user     => $db_user,
-        db_host     => $db_host,
-        db_pass     => $db_pass
+        system_user    => $user,
+        basedir        => $clone_target,
+        server_name    => $server_name,
+        admin_user     => $admin_user,
+        admin_pass     => $admin_pass,
+        admin_email    => $admin_email,
+        db_user        => $db_user,
+        db_host        => $db_host,
+        db_pass        => $db_pass,
+        poller_threads => $poller_threads,
     }
 
     include ::librenms::devices
