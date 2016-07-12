@@ -18,7 +18,9 @@ class librenms::params {
                                     'nmap',
                                     'python-mysqldb',
                                     'rrdtool',
-                                    'snmp']
+                                    'snmp',
+                                    'php-mail',
+                                    'php-net-smtp']
         }
         default: {
             fail("Unsupported OS: ${::osfamily}")
