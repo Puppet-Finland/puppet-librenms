@@ -1,6 +1,6 @@
 {
   "name": "puppetfinland-librenms",
-  "version": "3.2.0",
+  "version": "4.0.0",
   "author": "Puppet-Finland team",
   "license": "BSD license",
   "summary": "Setup librenms",
@@ -11,6 +11,7 @@
     { "name": "puppetfinland/apache2", "version_requirement": ">= 2.1.0" },
     { "name": "puppetfinland/os", "version_requirement": ">= 0.5.5" },
     { "name": "puppetfinland/php", "version_requirement": ">= 2.3.0" },
+    { "name": "puppetfinland/systemd", "version_requirement": ">= 0.1.2" },
     { "name": "puppetlabs/stdlib", "version_requirement": ">= 4.0.0" }
   ]
 }

@@ -16,6 +16,21 @@ Example usage using Hiera:
     librenms::dbserver::bind_address: '127.0.0.1'
     librenms::dbserver::password: '<librenms-database-password>'
     librenms::dbserver::root_password: '<password>'
+    
+    # Activate poller modules (all disabled by default)
+    librenms::poller_modules:
+        'os': 1
+        'processors': 1
+        'mempools': 1
+        'storage': 1
+        'netstats': 1
+        'hr-mib': 1
+        'ucd-mib': 1
+        'ipSystemStats': 1
+        'ports': 1
+        'ucd-diskio': 1
+        'entity-physical': 1
+    
     php::config_overrides:
         date.timezone: 'Etc/UTC'
 

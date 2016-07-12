@@ -28,7 +28,7 @@ $config['install_dir']  = "<%= @basedir %>";
 
 ### Enable this to use rrdcached. Be sure rrd_dir is within the rrdcached dir
 ### and that your web server has permission to talk to rrdcached.
-#$config['rrdcached']    = "unix:/var/run/rrdcached.sock";
+<%= @rrdcached_line %>
 
 ### Default community
 $config['snmp']['community'] = array("public");
@@ -47,3 +47,8 @@ $config['nets'][] = "10.0.0.0/8";
 $config['poller-wrapper']['alerter'] = FALSE;
 # Uncomment the next line to disable daily updates
 $config['update'] = 1;
+
+# Poller modules
+<% @l_poller_modules.each do |key, value| -%>
+$config['poller_modules']['<%= key %>'] = <%= value %>;
+<% end %>

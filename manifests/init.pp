@@ -17,6 +17,7 @@ class librenms
     $admin_email = $::serveradmin,
     $db_user = 'librenms',
     $db_host = 'localhost',
+    $poller_modules = {},
     $poller_threads = 16
 
 ) inherits librenms::params
@@ -30,6 +31,7 @@ class librenms
     }
 
     include ::apache2::config::php
+    include ::librenms::rrdcached
 
     class { '::librenms::install':
         user         => $user,
@@ -47,6 +49,7 @@ class librenms
         db_user        => $db_user,
         db_host        => $db_host,
         db_pass        => $db_pass,
+        poller_modules => $poller_modules,
         poller_threads => $poller_threads,
     }
 

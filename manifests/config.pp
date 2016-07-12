@@ -14,11 +14,11 @@ class librenms::config
             $db_user,
             $db_host,
             $db_pass,
+    Hash[String, Integer[0,1]] $poller_modules,
     Integer $poller_threads
 
 ) inherits librenms::params
 {
-
     File {
         ensure => 'present',
         mode   => '0755',
@@ -32,6 +32,17 @@ class librenms::config
         require => Class['::apache2::install'],
     }
 
+    # Construct the poller module hash, with defaults coming from params.pp
+    $l_poller_modules = merge($::librenms::params::default_poller_modules, $poller_modules)
+
+    # The LibreNMS-specific rrdcached service will only work on systemd distros 
+    # at the moment.
+    if str2bool($::has_systemd) {
+        $rrdcached_line = "\$config['rrdcached'] = \"unix:/opt/librenms/rrdcached/rrdcached.sock\";"
+    } else {
+        $rrdcached_line = '# rrdcached disabled by Puppet because this is not a systemd distro'
+    }
+
     file { 'librenms-config.php':
         path    => "${basedir}/config.php",
         owner   => $system_user,
@@ -39,6 +50,7 @@ class librenms::config
         content => template('librenms/config.php.erb'),
         require => Class['::librenms::install'],
     }
+
 
     php::module { 'mcrypt':
         ensure  => 'enabled',
