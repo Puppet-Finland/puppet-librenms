@@ -9,6 +9,9 @@ class librenms::rrdcached inherits librenms::params {
     ensure_resource('package', 'rrdcached', { 'ensure' => 'present' })
 
     if str2bool($::has_systemd) {
+
+        include ::systemd
+
         file { 'librenms-rrdcached-librenms.service':
             ensure  => 'present',
             name    => '/etc/systemd/system/rrdcached-librenms.service',
