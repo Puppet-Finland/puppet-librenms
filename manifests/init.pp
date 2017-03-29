@@ -18,7 +18,8 @@ class librenms
     $db_user = 'librenms',
     $db_host = 'localhost',
     $poller_modules = {},
-    $poller_threads = 16
+    $poller_threads = 16,
+    $php_config_overrides = {}
 
 ) inherits librenms::params
 {
@@ -34,9 +35,10 @@ class librenms
     include ::librenms::rrdcached
 
     class { '::librenms::install':
-        user         => $user,
-        clone_source => $clone_source,
-        basedir      => $clone_target,
+        user                 => $user,
+        clone_source         => $clone_source,
+        basedir              => $clone_target,
+        php_config_overrides => $php_config_overrides,
     }
 
     class { '::librenms::config':

@@ -5,19 +5,21 @@
 #
 class librenms::dbserver
 (
-    String $bind_address,
-    String $root_password,
-    String $host = 'localhost',
-    String $user = 'librenms',
-    String $password,
+    String  $bind_address,
+    String  $root_password,
+    String  $host = 'localhost',
+    String  $user = 'librenms',
+    String  $password,
+            $allow_addresses_ipv4
 
 ) inherits librenms::params
 {
 
     class { '::mysql':
-        bind_address  => $bind_address,
-        sql_mode      => '',
-        root_password => $root_password,
+        bind_address         => $bind_address,
+        allow_addresses_ipv4 => $allow_addresses_ipv4,
+        sql_mode             => '',
+        root_password        => $root_password,
     }
 
     class { '::mysql::config::innodb':

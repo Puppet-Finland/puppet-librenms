@@ -5,9 +5,10 @@
 #
 class librenms::install
 (
-    $user,
-    $clone_source,
-    $basedir
+    String $user,
+    String $clone_source,
+    String $basedir,
+    Hash   $php_config_overrides
 )
 {
     # Add libreNMS user
@@ -61,7 +62,9 @@ class librenms::install
     }
 
     # Dependencies
-    include ::php
+    class { '::php':
+        config_overrides => $php_config_overrides,
+    }
     include ::php::gd
     include ::php::mysql
     include ::php::cli
