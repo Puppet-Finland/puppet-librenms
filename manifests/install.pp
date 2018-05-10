@@ -20,16 +20,16 @@ class librenms::install
         system     => true,
         notify     => Exec['librenms-set-ownership'],
     }
-    ->
-    vcsrepo { 'librenms-repo-clone':
+
+    -> vcsrepo { 'librenms-repo-clone':
         ensure   => present,
         path     => $basedir,
         provider => 'git',
         source   => $::librenms::clone_source,
         notify   => Exec['librenms-set-ownership'],
     }
-    ->
-    file { 'librenms-rrd-dir':
+
+    -> file { 'librenms-rrd-dir':
         ensure => directory,
         path   => "${basedir}/rrd",
         mode   => '0775',
@@ -37,8 +37,8 @@ class librenms::install
         group  => $user,
         notify => Exec['librenms-set-ownership'],
     }
-    ->
-    file { 'librenms-logs-dir':
+
+    -> file { 'librenms-logs-dir':
         ensure => directory,
         path   => "${basedir}/logs",
         mode   => '0775',

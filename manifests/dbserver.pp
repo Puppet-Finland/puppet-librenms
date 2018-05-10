@@ -7,10 +7,10 @@ class librenms::dbserver
 (
     String  $bind_address,
     String  $root_password,
+    String  $password,
+            $allow_addresses_ipv4,
     String  $host = 'localhost',
     String  $user = 'librenms',
-    String  $password,
-            $allow_addresses_ipv4
 
 ) inherits librenms::params
 {
