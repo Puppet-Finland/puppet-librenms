@@ -14,7 +14,7 @@ class librenms
     $clone_source = $::librenms::params::clone_source,
     $clone_target = '/opt/librenms',
     $admin_user = 'admin',
-    $admin_email = $::serveradmin,
+    $admin_email = $::servermonitor,
     $db_user = 'librenms',
     $db_host = 'localhost',
     $poller_modules = {},
