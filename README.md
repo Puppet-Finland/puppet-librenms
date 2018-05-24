@@ -48,6 +48,13 @@ To import a node into LibreNMS using exported resources:
       pass  => 'my_password',
     }
 
+To use SNMPv2 instead:
+
+    class { '::librenms::device':
+      proto      => 'v2',
+      community  => 'public',
+    }
+
 For details see these classes/defines:
 
 * [Class: librenms](manifests/init.pp)
