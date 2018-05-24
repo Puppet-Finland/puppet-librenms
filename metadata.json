@@ -1,6 +1,6 @@
 {
   "name": "puppetfinland-librenms",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "author": "Puppet-Finland team",
   "summary": "Setup librenms server and add devices automatically with exported resources",
   "license": "BSD-2-Clause",
