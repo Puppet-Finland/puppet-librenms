@@ -29,20 +29,19 @@
 # [*pass*]
 #   Snmpv3 user password. Leave empty (default) to not use snmpv3.
 # [*proto*]
-#   Snmp protocol version. Valid values are 'v2c' and 'v3' (default). This 
+#   Snmp protocol version. Valid values are 'v1', 'v2c' and 'v3' (default). This 
 #   parameter is here primarily to reduce the conditional logic in this class.
 #
 class librenms::device
 (
-    $manage=true,
-    $librenms_basedir = '/opt/librenms',
-    $community=undef,
-    $user=undef,
-    $pass=undef,
-    $proto = 'v3'
+    Boolean               $manage = true,
+    String                $librenms_basedir = '/opt/librenms',
+    Optional[String]      $community = undef,
+    Optional[String]      $user = undef,
+    Optional[String]      $pass = undef,
+    Enum['v1','v2c','v3'] $proto = 'v3'
 )
 {
-    validate_bool($manage)
 
     if $manage {
 
