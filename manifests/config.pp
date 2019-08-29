@@ -16,9 +16,8 @@ class librenms::config
             $db_pass,
     Hash[String, Integer[0,1]] $poller_modules,
     Integer $poller_threads
-  
-) inherits librenms::params
-{
+
+) inherits librenms::params {
     File {
         ensure => 'present',
         mode   => '0755',

@@ -4,7 +4,7 @@
 # Configure rrdcached specifically for LibreNMS. This only supports
 # systemd-based distros at the moment.
 #
-class librenms::rrdcached 
+class librenms::rrdcached
 (
     Stdlib::Absolutepath $rrdcached_pidfile,
     Stdlib::Absolutepath $rrdcached_socketfile,
@@ -35,4 +35,4 @@ class librenms::rrdcached
             require => [ Class['systemd::service'], File['librenms-etc-default-rrdcached'] ],
         }
     }
-} 
+}
