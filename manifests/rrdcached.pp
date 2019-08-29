@@ -28,11 +28,11 @@ class librenms::rrdcached
             notify  => Class['systemd::service'],
         }
 
-        service { 'librenms-rrdcached-librenms':
+        service { 'librenms-rrdcached':
             ensure  => 'running',
             enable  => true,
-            name    => 'rrdcached-librenms',
+            name    => 'rrdcached',
             require => [ Class['systemd::service'], File['librenms-etc-default-rrdcached'] ],
-        }
+        }s
     }
 }
