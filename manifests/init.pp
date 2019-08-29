@@ -19,8 +19,10 @@ class librenms
     $db_host = 'localhost',
     $poller_modules = {},
     $poller_threads = 16,
-    $php_config_overrides = {}
-
+    $php_config_overrides = {},
+    $rrdcached_pidfile = '/run/rrdcached.pid',
+    $rrdcached_socketfile = '/run/rrdcached.sock',
+  
 ) inherits librenms::params
 {
 
@@ -32,7 +34,11 @@ class librenms
     }
 
     include ::apache2::config::php
-    include ::librenms::rrdcached
+
+    class { '::librenms::rrdcached':
+      rrdcached_pidfile    => $rrdcached_pidfile,
+      rrdcached_socketfile => $rrdcached_socketfile,
+    }
 
     class { '::librenms::install':
         user                 => $user,
@@ -42,17 +48,17 @@ class librenms
     }
 
     class { '::librenms::config':
-        system_user    => $user,
-        basedir        => $clone_target,
-        server_name    => $server_name,
-        admin_user     => $admin_user,
-        admin_pass     => $admin_pass,
-        admin_email    => $admin_email,
-        db_user        => $db_user,
-        db_host        => $db_host,
-        db_pass        => $db_pass,
-        poller_modules => $poller_modules,
-        poller_threads => $poller_threads,
+        system_user          => $user,
+        basedir              => $clone_target,
+        server_name          => $server_name,
+        admin_user           => $admin_user,
+        admin_pass           => $admin_pass,
+        admin_email          => $admin_email,
+        db_user              => $db_user,
+        db_host              => $db_host,
+        db_pass              => $db_pass,
+        poller_modules       => $poller_modules,
+        poller_threads       => $poller_threads,
     }
 
     include ::librenms::devices

@@ -17,8 +17,7 @@ class librenms::config
     Hash[String, Integer[0,1]] $poller_modules,
     Integer $poller_threads
 
-) inherits librenms::params
-{
+) inherits librenms::params {
     File {
         ensure => 'present',
         mode   => '0755',
@@ -38,7 +37,7 @@ class librenms::config
     # The LibreNMS-specific rrdcached service will only work on systemd distros 
     # at the moment.
     if str2bool($::has_systemd) {
-        $rrdcached_line = "\$config['rrdcached'] = \"unix:/opt/librenms/rrdcached/rrdcached.sock\";"
+        $rrdcached_line = "\$config['rrdcached'] = \"unix:/run/rrdcached.sock\";"
     } else {
         $rrdcached_line = '# rrdcached disabled by Puppet because this is not a systemd distro'
     }
@@ -87,5 +86,4 @@ class librenms::config
         minute  => '*/5',
         require => Class['::librenms::install'],
     }
-
 }
