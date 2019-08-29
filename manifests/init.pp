@@ -59,8 +59,6 @@ class librenms
         db_pass              => $db_pass,
         poller_modules       => $poller_modules,
         poller_threads       => $poller_threads,
-        pidfile              => $pidfile,
-        socketfile           => $socketfile,
     }
 
     include ::librenms::devices
