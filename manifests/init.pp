@@ -22,18 +22,21 @@ class librenms
     $php_config_overrides = {},
     $rrdcached_pidfile = '/run/rrdcached.pid',
     $rrdcached_socketfile = '/run/rrdcached.sock',
-  
+    Boolean $manage_apache = true,
+
 ) inherits librenms::params
 {
 
-    class { '::apache2':
+    if $manage_apache {
+
+      class { '::apache2':
         purge_default_sites => true,
         modules             => {
-            'rewrite' => {}
+          'rewrite' => {}
         },
+      }
+      include ::apache2::config::php
     }
-
-    include ::apache2::config::php
 
     class { '::librenms::rrdcached':
       rrdcached_pidfile    => $rrdcached_pidfile,
@@ -48,17 +51,18 @@ class librenms
     }
 
     class { '::librenms::config':
-        system_user          => $user,
-        basedir              => $clone_target,
-        server_name          => $server_name,
-        admin_user           => $admin_user,
-        admin_pass           => $admin_pass,
-        admin_email          => $admin_email,
-        db_user              => $db_user,
-        db_host              => $db_host,
-        db_pass              => $db_pass,
-        poller_modules       => $poller_modules,
-        poller_threads       => $poller_threads,
+        system_user    => $user,
+        basedir        => $clone_target,
+        server_name    => $server_name,
+        admin_user     => $admin_user,
+        admin_pass     => $admin_pass,
+        admin_email    => $admin_email,
+        db_user        => $db_user,
+        db_host        => $db_host,
+        db_pass        => $db_pass,
+        poller_modules => $poller_modules,
+        poller_threads => $poller_threads,
+        manage_apache  => $manage_apache,
     }
 
     include ::librenms::devices
