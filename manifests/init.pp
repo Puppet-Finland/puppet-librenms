@@ -22,7 +22,7 @@ class librenms
     $php_config_overrides = {},
     $rrdcached_pidfile = '/run/rrdcached.pid',
     $rrdcached_socketfile = '/run/rrdcached.sock',
-    $manage_apache = true,
+    Boolean $manage_apache = true,
 
 ) inherits librenms::params
 {
