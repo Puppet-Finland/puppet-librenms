@@ -62,7 +62,7 @@ class librenms::config
 
     Exec {
         user => $::os::params::adminuser,
-        path => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin', '/usr/local/bin', '/usr/local/sbin', $basedir ],
+        path => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin', '/usr/local/bin', '/usr/local/sbin' ],
     }
 
     if $db_host == 'localhost' {
@@ -78,7 +78,7 @@ class librenms::config
     }
 
     exec { 'librenms-adduser.php':
-        command => "php adduser.php ${admin_user} ${admin_pass} 10 ${admin_email} && touch ${basedir}/.adduser.php-ran",
+        command => "php ${basedir}/adduser.php ${admin_user} ${admin_pass} 10 ${admin_email} && touch ${basedir}/.adduser.php-ran",
         creates => "${basedir}/.adduser.php-ran",
         require => Exec['librenms-build-base.php'],
     }
