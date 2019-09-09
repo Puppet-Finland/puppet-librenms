@@ -57,8 +57,8 @@ class librenms::config
     }
 
     Exec {
-        user    => $::os::params::adminuser,
-        path    => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin', '/usr/local/bin', '/usr/local/sbin' ],
+        user => $::os::params::adminuser,
+        path => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin', '/usr/local/bin', '/usr/local/sbin', $basedir ],
     }
 
     if $db_host == 'localhost' {
