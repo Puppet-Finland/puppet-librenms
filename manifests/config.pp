@@ -83,7 +83,7 @@ class librenms::config
         require =>
         [
           $build_base_php_require,
-          ss'librenms-composer_wrapper.php',
+          'librenms-composer_wrapper.php',
         ]
     }
 
