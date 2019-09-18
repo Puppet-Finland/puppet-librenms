@@ -83,11 +83,12 @@ class librenms::config
         require => Exec['librenms-build-base.php'],
     }
 
-    # Without the poller-wrapper we don't get any information from snmpd daemons
-    cron { 'librenms-poller-wrapper.py':
-        command => "${basedir}/poller-wrapper.py ${poller_threads} > /dev/null 2>&1",
-        user    => 'root',
-        minute  => '*/5',
-        require => Class['::librenms::install'],
+    file { '/etc/cron.d/librenms':
+      ensure  => 'present',
+      source  => 'file:///opt/librenms/librenms.nonroot.cron',
+      mode    => '0644',
+      owner   => 'root',
+      group   => 'root',
+      require => Class['::librenms::install'],
     }
 }
