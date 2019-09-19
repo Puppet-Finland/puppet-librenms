@@ -29,6 +29,7 @@ $config['install_dir']  = "<%= @basedir %>";
 ### Enable this to use rrdcached. Be sure rrd_dir is within the rrdcached dir
 ### and that your web server has permission to talk to rrdcached.
 <%= @rrdcached_line %>
+$config['rrdtool_version'] = "<%= @rrdtool_version %>";
 
 ### Default community
 $config['snmp']['community'] = array("public");

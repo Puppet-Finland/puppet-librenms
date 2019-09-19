@@ -17,6 +17,7 @@ class librenms::config
     Hash[String, Integer[0,1]] $poller_modules,
     Integer $poller_threads,
     Boolean $manage_apache,
+    String  $rrdtool_version,
 
 ) inherits librenms::params {
     File {
