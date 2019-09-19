@@ -75,6 +75,8 @@ class librenms::install
     include ::php::json
     include ::php::net_ipv4
     include ::php::net_ipv6
+    include ::php::mbstring
+    include ::php::zip
 
     ensure_packages($::librenms::params::dependency_packages, {'ensure' => 'present'})
 }

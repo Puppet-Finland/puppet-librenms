@@ -71,10 +71,20 @@ class librenms::config
         $build_base_php_require = File['librenms-config.php']
     }
 
+    exec { 'librenms-composer_wrapper.php':
+        command => "php ${basedir}/scripts/composer_wrapper.php && touch ${basedir}/.composer_wrapper.php-ran",
+        creates => "${basedir}/.composer_wrapper.php-ran",
+        require => $build_base_php_require,
+    }
+
     exec { 'librenms-build-base.php':
         command => "php ${basedir}/build-base.php && touch ${basedir}/.build-base.php-ran",
         creates => "${basedir}/.build-base.php-ran",
-        require => $build_base_php_require,
+        require =>
+        [
+          $build_base_php_require,
+          Exec['librenms-composer_wrapper.php'],
+        ]
     }
 
     exec { 'librenms-adduser.php':
