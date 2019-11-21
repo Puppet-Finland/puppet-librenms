@@ -55,6 +55,37 @@ To use SNMPv2 instead:
       community  => 'public',
     }
 
+Create and remove devices using [LibreNMS v0 API](https://docs.librenms.org/API/Devices/):
+
+    librenms_device { 'snmpv3.example.org':
+      ensure     => 'present',
+      url        => 'https://librenms.example.org/api/v0',
+      auth_token => '0123456789abcde0123456789abcded0',
+      snmpver    => 'v3',
+      authlevel  => 'noAuthNoPriv',
+      authname   => 'snmpuser',
+      authpass   => 'secret',
+      authalgo   => 'sha',
+      cryptopass => 'secret',
+      cryptoalgo => 'aes',
+    }
+    
+    librenms_device { 'snmpv2.example.org':
+      ensure     => 'present',
+      url        => 'https://librenms.example.org/api/v0',
+      auth_token => '0123456789abcde0123456789abcded0',
+      snmpver    => 'v2c',
+      community  => 'public',
+    }
+    
+    # Ensure that a decommissioned node is not present in LibreNMS
+    librenms_device { 'decommissioned.example.org':
+      ensure => 'absent',
+    }
+
+The provider uses the "force_add" parameter to ensure that nodes that are
+(still) inaccessible (e.g. being provisioned) are added correctly.
+
 For details see these classes/defines:
 
 * [Class: librenms](manifests/init.pp)
