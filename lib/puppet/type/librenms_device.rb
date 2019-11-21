@@ -13,7 +13,7 @@ module Puppet
       end
 
       if self[:snmpver] != :v3
-        params = %i[authlevel authname authpass authalgo cryptopass cryptoalgo]
+        params = [ 'authlevel', 'authname', 'authpass', 'authalgo', 'cryptopass', 'cryptoalgo' ]
         params.each do |param|
           raise("Parameter #{param} is only valid for SNMPv3") if self[param]
         end
