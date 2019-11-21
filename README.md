@@ -84,11 +84,4 @@ Create and remove devices using [LibreNMS v0 API](https://docs.librenms.org/API/
     }
 
 The provider uses the "force_add" parameter to ensure that nodes that are
-(still) inaccessible (e.g. being provisioned) are added correctly.
-
-For details see these classes/defines:
-
-* [Class: librenms](manifests/init.pp)
-* [Class: librenms::dbserver](manifests/dbserver.pp)
-* [Class: librenms::device](manifests/device.pp)
-
+(temporarily) inaccessible (e.g. being provisioned) are added correctly.
