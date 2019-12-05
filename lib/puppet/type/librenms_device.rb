@@ -1,10 +1,12 @@
-require 'uri'
+
 
 # frozen_string_literal: true
 
 # LibreNMS device type for Puppet
 module Puppet
   Type.newtype(:librenms_device) do
+    require 'uri'
+
     @doc = 'Manage LibreNMS devices'
 
     validate do

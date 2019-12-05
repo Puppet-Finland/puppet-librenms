@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
-require 'rubygems'
-require 'rest_client'
-require 'json'
-
 Puppet::Type.type(:librenms_device).provide(:api) do
+
+  require 'rubygems'
+  require 'rest_client'
+  require 'json'
+
   defaultfor kernel: 'Linux'
 
   def exists?
