@@ -18,6 +18,7 @@ class librenms::config
     Integer $poller_threads,
     Boolean $manage_apache,
     String  $rrdtool_version,
+    Optional[Array[String]] $extra_config_files = undef,
 
 ) inherits librenms::params {
     File {

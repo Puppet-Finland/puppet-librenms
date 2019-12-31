@@ -24,6 +24,7 @@ class librenms
     $rrdcached_socketfile = '/run/rrdcached.sock',
     $rrdtool_version = '1.7.0',
     Boolean $manage_apache = true,
+    $extra_config_files = undef,
 
 ) inherits librenms::params
 {
@@ -52,19 +53,20 @@ class librenms
     }
 
     class { '::librenms::config':
-        system_user     => $user,
-        basedir         => $clone_target,
-        server_name     => $server_name,
-        admin_user      => $admin_user,
-        admin_pass      => $admin_pass,
-        admin_email     => $admin_email,
-        db_user         => $db_user,
-        db_host         => $db_host,
-        db_pass         => $db_pass,
-        poller_modules  => $poller_modules,
-        poller_threads  => $poller_threads,
-        manage_apache   => $manage_apache,
-        rrdtool_version => $rrdtool_version,
+        system_user        => $user,
+        basedir            => $clone_target,
+        server_name        => $server_name,
+        admin_user         => $admin_user,
+        admin_pass         => $admin_pass,
+        admin_email        => $admin_email,
+        db_user            => $db_user,
+        db_host            => $db_host,
+        db_pass            => $db_pass,
+        poller_modules     => $poller_modules,
+        poller_threads     => $poller_threads,
+        manage_apache      => $manage_apache,
+        rrdtool_version    => $rrdtool_version,
+        extra_config_files => $extra_config_files,
     }
 
     include ::librenms::devices
