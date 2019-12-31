@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'rubygems'
-require 'rest_client'
-require 'json'
-
 Puppet::Type.type(:librenms_device).provide(:api) do
+  require 'rubygems'
+  require 'rest_client'
+  require 'json'
+
   defaultfor kernel: 'Linux'
 
   def exists?
@@ -37,8 +37,8 @@ Puppet::Type.type(:librenms_device).provide(:api) do
       next unless device['hostname'] == resource[:name]
 
       # Populate properties of this instance
-      properties = %w[authalgo authlevel authname authpass community
-                      cryptoalgo cryptopass port snmpver]
+      properties = ['authalgo', 'authlevel', 'authname', 'authpass', 'community',
+                    'cryptoalgo', 'cryptopass', 'port', 'snmpver']
       properties.each do |property|
         @my_properties[property] = device[property]
       end
