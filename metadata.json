@@ -16,6 +16,10 @@
       "version_requirement": ">= 2.1.0"
     },
     {
+      "name": "puppetlabs/concat",
+      "version_requirement": ">= 4.0.0"
+    },
+    {
       "name": "puppetfinland/os",
       "version_requirement": ">= 0.5.5"
     },

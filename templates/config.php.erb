@@ -53,10 +53,3 @@ $config['update'] = 1;
 <% @l_poller_modules.each do |key, value| -%>
 $config['poller_modules']['<%= key %>'] = <%= value %>;
 <% end %>
-
-# Extra PHP configuration files
-<% if @extra_config_files -%>
-<% @extra_config_files.each do |config_file| -%>
-require_once('<%= config_file %>');
-<% end -%>
-<% end -%>

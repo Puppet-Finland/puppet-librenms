@@ -18,7 +18,6 @@ class librenms::config
     Integer $poller_threads,
     Boolean $manage_apache,
     String  $rrdtool_version,
-    Optional[Array[String]] $extra_config_files = undef,
 
 ) inherits librenms::params {
     File {
@@ -46,6 +45,22 @@ class librenms::config
         $rrdcached_line = "\$config['rrdcached'] = \"unix:/run/rrdcached.sock\";"
     } else {
         $rrdcached_line = '# rrdcached disabled by Puppet because this is not a systemd distro'
+    }
+
+    $config = "${basedir}/config.php"
+
+    concat { $config:
+        ensure  => 'present',
+        owner   => $system_user,
+        group   => $system_user,
+        mode    => '0644',
+        require => Class['::librenms::install'],
+    }
+
+    concat::fragment { 'librenms-baseconfig':
+        target  => $config,
+        content => template('librenms/config.php.erb'),
+        order   => '01',
     }
 
     file { 'librenms-config.php':

@@ -24,7 +24,6 @@ class librenms
     $rrdcached_socketfile = '/run/rrdcached.sock',
     $rrdtool_version = '1.7.0',
     Boolean $manage_apache = true,
-    $extra_config_files = undef,
 
 ) inherits librenms::params
 {
@@ -66,7 +65,6 @@ class librenms
         poller_threads     => $poller_threads,
         manage_apache      => $manage_apache,
         rrdtool_version    => $rrdtool_version,
-        extra_config_files => $extra_config_files,
     }
 
     include ::librenms::devices
