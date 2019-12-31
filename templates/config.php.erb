@@ -58,5 +58,5 @@ $config['poller_modules']['<%= key %>'] = <%= value %>;
 <% if @extra_config_files -%>
 <% @extra_config_files.each do |config_file| -%>
 require_once('<%= config_file %>');
-<% end %>
-<% end %>
+<% end -%>
+<% end -%>
