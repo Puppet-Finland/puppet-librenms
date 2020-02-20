@@ -74,7 +74,7 @@ class librenms::config
     }
 
     exec { 'librenms-composer_wrapper.php':
-        command => "php ${basedir}/scripts/composer_wrapper.php && touch ${basedir}/.composer_wrapper.php-ran",
+        command => "php ${basedir}/scripts/composer_wrapper.php install --no-dev && touch ${basedir}/.composer_wrapper.php-ran",
         creates => "${basedir}/.composer_wrapper.php-ran",
         require => $build_base_php_require,
     }
