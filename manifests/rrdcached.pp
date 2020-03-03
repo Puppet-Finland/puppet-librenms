@@ -33,6 +33,6 @@ class librenms::rrdcached
             enable  => true,
             name    => 'rrdcached',
             require => [ Class['systemd::service'], File['librenms-etc-default-rrdcached'] ],
-        }s
+        }
     }
 }
