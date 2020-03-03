@@ -60,7 +60,7 @@ class librenms::device
     @@exec { "Add ${::fqdn} to librenms":
         command => $fullcmd,
         path    => [ $librenms_basedir, '/bin', '/sbin', '/usr/bin', '/usr/sbin', '/usr/local/bin', 'usr/local/sbin' ],
-        unless  => ["mysql --defaults-extra-file=/root/.my.cnf -e \"SELECT hostname FROM librenms.devices WHERE hostname = \'${::fqdn}\'\"|grep ${::fqdn}"],
+        unless  => ["mysql --defaults-extra-file=/root/.my.cnf -e \"SELECT hostname FROM librenms.devices WHERE hostname = \'${::fqdn}\'\"|grep ${::fqdn}"], # lint:ignore:140chars
         user    => 'root',
         tag     => 'librenms-add_device',
     }
