@@ -27,6 +27,9 @@ class librenms::install
         provider => 'git',
         source   => $::librenms::clone_source,
         notify   => Exec['librenms-set-ownership'],
+        # Without this the rrd unit file would create /opt/librenms/rrd
+        # directory and make this resource fail
+        before   => Class['::librenms::rrdcached'],
     }
 
     -> file { 'librenms-rrd-dir':
