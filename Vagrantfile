@@ -15,6 +15,6 @@ Vagrant.configure("2") do |config|
         box.vm.network "private_network", ip: "192.168.152.10"
         box.vm.provision "shell", path: "vagrant/debian.sh"
         box.vm.provision "shell", path: "vagrant/common.sh"
-        box.vm.provision "shell", inline: "/opt/puppetlabs/bin/puppet apply /vagrant/vagrant/librenms.pp"
+        box.vm.provision "shell", inline: "/opt/puppetlabs/bin/puppet apply /vagrant/vagrant/librenms.pp --modulepath=/vagrant/modules"
     end
 end
