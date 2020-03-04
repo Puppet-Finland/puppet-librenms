@@ -23,22 +23,10 @@ class librenms
     $rrdcached_pidfile = '/run/rrdcached.pid',
     $rrdcached_socketfile = '/run/rrdcached.sock',
     $rrdtool_version = '1.7.0',
-    Boolean $manage_apache = true,
     $extra_config_files = undef,
 
 ) inherits librenms::params
 {
-
-    if $manage_apache {
-
-      class { '::apache2':
-        purge_default_sites => true,
-        modules             => {
-          'rewrite' => {}
-        },
-      }
-      include ::apache2::config::php
-    }
 
     class { '::librenms::rrdcached':
       rrdcached_pidfile    => $rrdcached_pidfile,
@@ -64,7 +52,6 @@ class librenms
         db_pass            => $db_pass,
         poller_modules     => $poller_modules,
         poller_threads     => $poller_threads,
-        manage_apache      => $manage_apache,
         rrdtool_version    => $rrdtool_version,
         extra_config_files => $extra_config_files,
     }
