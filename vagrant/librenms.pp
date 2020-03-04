@@ -50,7 +50,7 @@ include ::apache::mod::rewrite
 apache::vhost { 'librenms':
   servername  => 'librenms.vagrant.example.lan',
   port        => '80',
-  docroot     => '/var/www/html',
+  docroot     => '/opt/librenms/html',
   proxy_pass  =>
   [
     {
