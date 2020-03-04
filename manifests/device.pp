@@ -59,11 +59,10 @@ class librenms::device
     }
 
     $fullcmd = "${basecmd} ${params}"
-        $exec_defaults = {  'command' => $fullcmd,
-                            'path'    => [ $librenms_basedir, '/bin', '/sbin', '/usr/bin', '/usr/sbin', '/usr/local/bin', 'usr/local/sbin' ], # lint:ignore:140chars
-
-                            'unless'  => ["mysql --defaults-extra-file=/root/.my.cnf -e \"SELECT hostname FROM librenms.devices WHERE hostname = \'${::fqdn}\'\"|grep ${::fqdn}"], # lint:ignore:140chars
-                            'user'    => 'root', }
+    $exec_defaults = {  'command' => $fullcmd,
+                        'path'    => [ $librenms_basedir, '/bin', '/sbin', '/usr/bin', '/usr/sbin', '/usr/local/bin', 'usr/local/sbin' ], # lint:ignore:140chars
+                        'unless'  => ["mysql --defaults-extra-file=/root/.my.cnf -e \"SELECT hostname FROM librenms.devices WHERE hostname = \'${::fqdn}\'\"|grep ${::fqdn}"], # lint:ignore:140chars
+                        'user'    => 'root', }
 
     # Add the node if it does not already exist in LibreNMS database. The grep 
     # is needed to produce a meaningful return value (0 or 1).
