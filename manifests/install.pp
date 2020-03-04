@@ -11,6 +11,7 @@ class librenms::install
     Hash   $php_config_overrides
 )
 {
+
     # Add libreNMS user
     user {'librenms-user':
         ensure     => 'present',
@@ -18,44 +19,46 @@ class librenms::install
         home       => $basedir,
         managehome => false,
         system     => true,
-        notify     => Exec['librenms-set-ownership'],
     }
 
-    -> vcsrepo { 'librenms-repo-clone':
+    vcsrepo { 'librenms-repo-clone':
         ensure   => present,
         path     => $basedir,
         provider => 'git',
         source   => $::librenms::clone_source,
-        notify   => Exec['librenms-set-ownership'],
         # Without this the rrd unit file would create /opt/librenms/rrd
         # directory and make this resource fail
         before   => Class['::librenms::rrdcached'],
+        require  => User['librenms-user'],
     }
 
-    -> file { 'librenms-rrd-dir':
-        ensure => directory,
-        path   => "${basedir}/rrd",
-        mode   => '0775',
-        owner  => $user,
-        group  => $user,
-        notify => Exec['librenms-set-ownership'],
+    # Set permissions and ACLs as described in
+    #
+    # <https://docs.librenms.org/Installation/Installation-Ubuntu-1804-Apache/>
+    #
+    file { $basedir:
+        ensure  => 'directory',
+        owner   => $user,
+        group   => $user,
+        mode    => '0750',
+        recurse => true,
+        require => Vcsrepo['librenms-repo-clone'],
     }
 
-    -> file { 'librenms-logs-dir':
-        ensure => directory,
-        path   => "${basedir}/logs",
-        mode   => '0775',
-        owner  => $user,
-        group  => $user,
-        notify => Exec['librenms-set-ownership'],
+    package { 'acl':
+        ensure => 'present',
     }
 
-    # move all files to librenms user
-    exec { 'librenms-set-ownership':
-        path    => ['/bin', '/usr/bin'],
-        command => "chown -R ${user}:${user} ${basedir}",
-        onlyif  => "find ${basedir} ! -user ${user}|grep \"${basedir}\"",
-        require => User['librenms-user'],
+    # Set ACLs for the files that need to be editable for all
+    $acl_dirs = ["${basedir}/rrd", "${basedir}/logs", "${basedir}/bootstrap/cache", "${basedir}/storage"].each |$dir| {
+        posix_acl { $dir:
+            action     => set,
+            provider   => posixacl,
+            permission => [ 'default:g::rwx',
+                            'g::rwx'],
+            recursive  => true,
+            require    => [File[$basedir], Package['acl']],
+        }
     }
 
     # Hack www-data to librenms group, if www-data user is defined

@@ -9,23 +9,27 @@
   "dependencies": [
     {
       "name": "puppetfinland/mysql",
-      "version_requirement": ">= 2.1.0"
+      "version_requirement": ">= 2.1.0 < 4.0.0"
     },
     {
       "name": "puppetfinland/os",
-      "version_requirement": ">= 0.5.5"
+      "version_requirement": ">= 0.5.5 < 2.0.0"
     },
     {
       "name": "puppetfinland/php",
-      "version_requirement": ">= 2.3.0"
+      "version_requirement": ">= 2.3.0 < 3.0.0"
+    },
+    {
+      "name": "puppet/posix_acl",
+      "version_requirement": ">= 1.0.0 < 2.0.0"
     },
     {
       "name": "puppetfinland/systemd",
-      "version_requirement": ">= 0.1.2"
+      "version_requirement": ">= 0.1.2 < 2.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.0.0"
+      "version_requirement": ">= 4.0.0 < 7.0.0"
     }
   ],
   "operatingsystem_support": [

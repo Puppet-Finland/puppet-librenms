@@ -14,6 +14,7 @@ mod 'puppetfinland-os', '1.1.3'
 mod 'puppetfinland-php',
   :git => 'https://github.com/Puppet-Finland/puppet-php',
   :commit => '9116b98ec4bfa171d19c6592b9a2417bfeb53f14'
+mod 'puppet/posix_acl', '1.0.0'
 mod 'puppetfinland-snmpd',
   :git => 'https://github.com/Puppet-Finland/puppet-snmpd.git',
   :commit => 'a4e7477c61230a85171caba4fc3b3faa27d5b9ad'
