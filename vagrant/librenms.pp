@@ -1,6 +1,9 @@
 notify { 'Provisioning LibreNMS': }
 
 $servermonitor = 'hostmaster@vagrant.example.lan'
+$snmp_user = 'librenms'
+# The SNMP password will have to be long enough or you will run into odd issues
+$snmp_pass = 'vagrant123'
 
 host { 'librenms.vagrant.example.lan':
   ensure => 'present',
@@ -9,10 +12,10 @@ host { 'librenms.vagrant.example.lan':
 }
 
 class { '::librenms':
-  admin_pass          => 'vagrant',
-  db_pass             => 'vagrant',
-  admin_email         => 'hostmaster@vagrant.example.lan',
-  poller_modules      => {
+  admin_pass           => 'vagrant',
+  db_pass              => 'vagrant',
+  admin_email          => 'hostmaster@vagrant.example.lan',
+  poller_modules       => {
     'os'              => 1,
     'processors'      => 1,
     'mempools'        => 1,
@@ -47,17 +50,19 @@ include ::apache::mod::headers
 include ::apache::mod::rewrite
 
 apache::vhost { 'librenms':
-  servername  => 'librenms.vagrant.example.lan',
-  port        => '80',
-  docroot     => '/opt/librenms/html',
-  proxy_pass  =>
+  servername      => 'librenms.vagrant.example.lan',
+  port            => '80',
+  docroot         => '/opt/librenms/html',
+  docroot_owner   => 'librenms',
+  docroot_group   => 'librenms',
+  proxy_pass      =>
   [
     {
       'path' => '/opt/librenms/html/',
       'url'  => '!',
     }
   ],
-  directories =>
+  directories     =>
     [
       {
         'path'           => '/opt/librenms/html/',
@@ -69,3 +74,20 @@ apache::vhost { 'librenms':
   headers         => [ 'always set Strict-Transport-Security "max-age=15768000; includeSubDomains; preload"' ],
 }
 
+class { '::snmpd':
+  manage_packetfilter => false,
+}
+
+::snmpd::user { $snmp_user:
+  pass => $snmp_pass,
+}
+
+# Add this node to LibreNMS. The realize => true makes the Exec run directly on
+# this node instead of getting exported (which does not work with puppet apply)
+#
+class { '::librenms::device':
+  proto   => 'v3',
+  user    => $snmp_user,
+  pass    => $snmp_pass,
+  realize => true,
+}

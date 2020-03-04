@@ -14,6 +14,9 @@ mod 'puppetfinland-os', '1.1.3'
 mod 'puppetfinland-php',
   :git => 'https://github.com/Puppet-Finland/puppet-php',
   :commit => '9116b98ec4bfa171d19c6592b9a2417bfeb53f14'
+mod 'puppetfinland-snmpd',
+  :git => 'https://github.com/Puppet-Finland/puppet-snmpd.git',
+  :commit => 'a4e7477c61230a85171caba4fc3b3faa27d5b9ad'
 mod 'puppetlabs-stdlib', '4.25.1'
 mod 'camptocamp-systemd',
   :git => 'https://github.com/Puppet-Finland/puppet-systemd-1.git',
