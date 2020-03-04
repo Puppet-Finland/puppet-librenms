@@ -4,34 +4,8 @@ A Puppet module for managing LibreNMS
 
 # Usage
 
-Setup LibreNMS, MySQL and php:
-
-    class { '::php':
-        config_overrides => { date.timezone => 'Etc/UTC' },
-    }
-    
-    class { '::librenms':
-      admin_pass     => 'admin-password',
-      db_pass        => 'database-password',
-      poller_modules => { 'os'             => 1,
-                          'processors'     => 1,
-                          'mempools'       => 1,
-                          'storage'        => 1,
-                          'netstats'       => 1,
-                          'hr-mib'         => 1,
-                          'ucd-mib'        => 1,
-                          'ipSystemStats'  => 1,
-                          'ports'          => 1,
-                          'ucd-diskio'     => 1,
-                          'entity-physical'=> 1,
-                        },
-    }
-    
-    class { '::librenms::dbserver':
-      bind_address   => '127.0.0.1',
-      password       => 'database-password',
-      root_password  => 'database-root-password',
-    }
+An example on how to use this module with puppetlabs-apache to setup LibreNMS
+to listen on HTTP is available in [vagrant/librenms.pp](vagrant/librenms.pp).
 
 To import a node into LibreNMS using exported resources:
 

@@ -16,7 +16,6 @@ class librenms::config
             $db_pass,
     Hash[String, Integer[0,1]] $poller_modules,
     Integer $poller_threads,
-    Boolean $manage_apache,
     String  $rrdtool_version,
     Optional[Array[String]] $extra_config_files = undef,
 
@@ -24,17 +23,6 @@ class librenms::config
     File {
         ensure => 'present',
         mode   => '0755',
-    }
-
-    if $manage_apache {
-
-      file { 'librenms-apache-site-conf':
-        path    => "${::librenms::params::apache_sites_dir}/librenms.conf",
-        content => template('librenms/apache_vhost.conf.erb'),
-        owner   => $::os::params::adminuser,
-        group   => $::os::params::admingroup,
-        require => Class['::apache2::install'],
-      }
     }
 
     # Construct the poller module hash, with defaults coming from params.pp

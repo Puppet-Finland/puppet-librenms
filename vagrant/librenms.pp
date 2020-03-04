@@ -12,7 +12,6 @@ class { '::librenms':
   admin_pass          => 'vagrant',
   db_pass             => 'vagrant',
   admin_email         => 'hostmaster@vagrant.example.lan',
-  manage_apache       => false,
   poller_modules      => {
     'os'              => 1,
     'processors'      => 1,
