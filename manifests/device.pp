@@ -31,6 +31,10 @@
 # [*proto*]
 #   Snmp protocol version. Valid values are 'v1', 'v2c' and 'v3' (default). This 
 #   parameter is here primarily to reduce the conditional logic in this class.
+# [*realize*]
+#   Do not export the Exec that joins this node to LibreNMS. Instead run it
+#   directly.  Useful primarily in Vagrant and will only work on the LibreNMS
+#   server itself. Defaults to false.
 #
 class librenms::device
 (
@@ -39,7 +43,8 @@ class librenms::device
     Optional[String]      $community = undef,
     Optional[String]      $user = undef,
     Optional[String]      $pass = undef,
-    Enum['v1','v2c','v3'] $proto = 'v3'
+    Enum['v1','v2c','v3'] $proto = 'v3',
+    Boolean               $realize = false
 )
 {
 
@@ -54,15 +59,22 @@ class librenms::device
     }
 
     $fullcmd = "${basecmd} ${params}"
+        $exec_defaults = {  'command' => $fullcmd,
+                            'path'    => [ $librenms_basedir, '/bin', '/sbin', '/usr/bin', '/usr/sbin', '/usr/local/bin', 'usr/local/sbin' ],
+                            'unless'  => ["mysql --defaults-extra-file=/root/.my.cnf -e \"SELECT hostname FROM librenms.devices WHERE hostname = \'${::fqdn}\'\"|grep ${::fqdn}"], # lint:ignore:140chars
+                            'user'    => 'root', }
 
     # Add the node if it does not already exist in LibreNMS database. The grep 
     # is needed to produce a meaningful return value (0 or 1).
-    @@exec { "Add ${::fqdn} to librenms":
-        command => $fullcmd,
-        path    => [ $librenms_basedir, '/bin', '/sbin', '/usr/bin', '/usr/sbin', '/usr/local/bin', 'usr/local/sbin' ],
-        unless  => ["mysql --defaults-extra-file=/root/.my.cnf -e \"SELECT hostname FROM librenms.devices WHERE hostname = \'${::fqdn}\'\"|grep ${::fqdn}"], # lint:ignore:140chars
-        user    => 'root',
-        tag     => 'librenms-add_device',
+    if $realize {
+        exec { "Add ${::fqdn} to librenms":
+            * => $exec_defaults,
+        }
+    } else {
+        @@exec { "Add ${::fqdn} to librenms":
+            tag => 'librenms-add_device',
+            *   => $exec_defaults,
+        }
     }
     }
 }
