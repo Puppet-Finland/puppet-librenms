@@ -66,6 +66,23 @@ Create and remove devices using [LibreNMS v0 API](https://docs.librenms.org/API/
 The provider uses the "force_add" parameter to ensure that nodes that are
 (temporarily) inaccessible (e.g. being provisioned) are added correctly.
 
+You can also manage services using the [LibreNMS v0 API](https://docs.librenms.org/API/Services/):
+
+    librenms_service { 'http-on-librenms':
+      ensure     => 'present',
+      url        => 'http://librenms.example.org/api/v0',
+      auth_token => '0123456789abcde0123456789abcded0',
+      hostname   => 'librenms.example.org',
+      type       => 'http',
+      ip         => 'librenms.example.org',
+      param      => 'C 50 --sni -S',
+    }
+
+There are couple of caveats regarding service management:
+
+* The "desc" parameter, which defaults to the resource title, is used as an identifier at the LibreNMS. This is because it is the only property which is purely informational. You can use this to import existing resources to Puppet. If multiple services matching the same "desc" on the same device are found then Puppet will bail out and ask you to resolve the situation.
+* No verification is done on any of the parameters at Puppet or LibreNMS end except for basic data type validation. For example you can change "type" from "http" (valid) to "https" (invalid) without any errors or warnings.
+
 # Testing with Vagrant
 
 If you have Vagrant and virtualbox installed then setting up LibreNMS test
