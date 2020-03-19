@@ -17,7 +17,7 @@ class librenms::config
     Hash[String, Integer[0,1]] $poller_modules,
     Integer $poller_threads,
     String  $rrdtool_version,
-    Optional[Array[String]] $extra_config_files = undef,
+    Optional[String] $extra_config_file = undef,
 
 ) inherits librenms::params {
     File {
@@ -43,7 +43,6 @@ class librenms::config
         content => template('librenms/config.php.erb'),
         require => Class['::librenms::install'],
     }
-
 
     php::module { 'mcrypt':
         ensure  => 'enabled',

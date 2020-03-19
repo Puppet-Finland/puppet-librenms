@@ -6,9 +6,8 @@
 #
 class librenms::devices {
 
-    # Add all Puppet-managed nodes ("devices") to librenms
-    Exec <<| tag == 'librenms-add_device' |>> {
-        require +> [ Class['librenms::config'], ],
-    }
-
+  # Add all Puppet-managed nodes ("devices") to librenms
+  Exec <<| tag == 'librenms-add_device' |>> {
+    require +> [ Class['librenms::config'], ],
+  }
 }
