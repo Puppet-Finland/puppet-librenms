@@ -38,43 +38,45 @@
 #
 class librenms::device
 (
-    Boolean               $manage = true,
-    String                $librenms_basedir = '/opt/librenms',
-    Optional[String]      $community = undef,
-    Optional[String]      $user = undef,
-    Optional[String]      $pass = undef,
-    Enum['v1','v2c','v3'] $proto = 'v3',
-    Boolean               $realize = false
+  Boolean               $manage = true,
+  String                $librenms_basedir = '/opt/librenms',
+  Optional[String]      $community = undef,
+  Optional[String]      $user = undef,
+  Optional[String]      $pass = undef,
+  Enum['v1','v2c','v3'] $proto = 'v3',
+  Boolean               $realize = false
 )
 {
 
-    if $manage {
+  if $manage {
 
     $basecmd = "${librenms_basedir}/addhost.php ${::fqdn}"
 
     case $proto {
-        'v2c':    { $params = "${community} ${proto}" }
-        'v3':     { $params = "ap ${proto} ${user} ${pass} ${pass} sha aes" }
-        default: { fail("Invalid value ${proto} for parameter \$proto") }
+      'v2c':    { $params = "${community} ${proto}" }
+      'v3':     { $params = "ap ${proto} ${user} ${pass} ${pass} sha aes" }
+      default:  { fail("Invalid value ${proto} for parameter \$proto") }
     }
 
     $fullcmd = "${basecmd} ${params}"
-    $exec_defaults = {  'command' => $fullcmd,
-                        'path'    => [ $librenms_basedir, '/bin', '/sbin', '/usr/bin', '/usr/sbin', '/usr/local/bin', 'usr/local/sbin' ], # lint:ignore:140chars
-                        'unless'  => ["mysql --defaults-extra-file=/root/.my.cnf -e \"SELECT hostname FROM librenms.devices WHERE hostname = \'${::fqdn}\'\"|grep ${::fqdn}"], # lint:ignore:140chars
-                        'user'    => 'root', }
+    $exec_defaults = {
+      'command' => $fullcmd,
+      'path'    => [ $librenms_basedir, '/bin', '/sbin', '/usr/bin', '/usr/sbin', '/usr/local/bin', 'usr/local/sbin' ], # lint:ignore:140chars
+      'unless'  => ["mysql --defaults-extra-file=/root/.my.cnf -e \"SELECT hostname FROM librenms.devices WHERE hostname = \'${::fqdn}\'\"|grep ${::fqdn}"], # lint:ignore:140chars
+      'user'    => 'root',
+    }
 
     # Add the node if it does not already exist in LibreNMS database. The grep 
     # is needed to produce a meaningful return value (0 or 1).
     if $realize {
-        exec { "Add ${::fqdn} to librenms":
-            * => $exec_defaults,
-        }
+      exec { "Add ${::fqdn} to librenms":
+        * => $exec_defaults,
+      }
     } else {
-        @@exec { "Add ${::fqdn} to librenms":
-            tag => 'librenms-add_device',
-            *   => $exec_defaults,
-        }
+      @@exec { "Add ${::fqdn} to librenms":
+        tag => 'librenms-add_device',
+        *   => $exec_defaults,
+      }
     }
-    }
+  }
 }
