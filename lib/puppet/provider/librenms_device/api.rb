@@ -76,7 +76,7 @@ Puppet::Type.type(:librenms_device).provide(:api) do
     # Construct data differently for SNMP v1/v2c and v3 clients. The validate
     # function in the type ensures that we don't need excessive logic at this
     # point.
-    if resource[:snmpver] =~ /(v1|v2c)/
+    if resource[:snmpver] =~ /(v1|v2c)/ # rubocop:disable Style/RegexpLiteral
       data = snmp_v2c_data
     elsif resource[:snmpver] == :v3
       data = snmp_v3_data

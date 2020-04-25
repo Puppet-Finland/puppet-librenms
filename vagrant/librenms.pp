@@ -93,3 +93,8 @@ class { '::librenms::device':
   # Ensure that LibreNMS is fully setup before we try to add this node this it
   require => [ Snmpd::User[$snmp_user], Class['::librenms'], ],
 }
+
+# This is needed when experimenting with LibreNMS service checks
+package { 'monitoring-plugins':
+  ensure => 'present',
+}
