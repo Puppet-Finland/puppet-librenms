@@ -5,6 +5,7 @@
 #
 class librenms::config
 (
+    Boolean $manage_php,
     String  $system_user,
             $basedir,
     String  $server_name,
@@ -44,9 +45,11 @@ class librenms::config
         require => Class['::librenms::install'],
     }
 
-    php::module { 'mcrypt':
-        ensure  => 'enabled',
-        require => Class['::librenms::install'],
+    if $manage_php {
+        php::module { 'mcrypt':
+            ensure  => 'enabled',
+            require => Class['::librenms::install'],
+        }
     }
 
     Exec {

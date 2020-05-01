@@ -5,10 +5,11 @@
 #
 class librenms::install
 (
-  String $user,
-  String $clone_source,
-  String $basedir,
-  Hash   $php_config_overrides
+  Boolean $manage_php,
+  String  $user,
+  String  $clone_source,
+  String  $basedir,
+  Hash    $php_config_overrides
 )
 {
 
@@ -66,22 +67,23 @@ class librenms::install
     require +> [User['librenms-user'], ],
   }
 
-  # Dependencies
-  class { '::php':
-    config_overrides => $php_config_overrides,
+  if $manage_php {
+    class { '::php':
+      config_overrides => $php_config_overrides,
+    }
+    include ::php::gd
+    include ::php::mysql
+    include ::php::cli
+    include ::php::pear
+    include ::php::curl
+    include ::php::snmp
+    include ::php::mcrypt
+    include ::php::json
+    include ::php::net_ipv4
+    include ::php::net_ipv6
+    include ::php::mbstring
+    include ::php::zip
   }
-  include ::php::gd
-  include ::php::mysql
-  include ::php::cli
-  include ::php::pear
-  include ::php::curl
-  include ::php::snmp
-  include ::php::mcrypt
-  include ::php::json
-  include ::php::net_ipv4
-  include ::php::net_ipv6
-  include ::php::mbstring
-  include ::php::zip
 
   ensure_packages($::librenms::params::dependency_packages, {'ensure' => 'present'})
 }

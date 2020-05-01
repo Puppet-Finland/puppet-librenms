@@ -9,6 +9,7 @@ class librenms
 (
   $admin_pass,
   $db_pass,
+  Boolean $manage_php = true,
   $user = 'librenms',
   $server_name = $::fqdn,
   $clone_source = $::librenms::params::clone_source,
@@ -34,6 +35,7 @@ class librenms
   }
 
   class { '::librenms::install':
+    manage_php           => $manage_php,
     user                 => $user,
     clone_source         => $clone_source,
     basedir              => $clone_target,
@@ -41,6 +43,7 @@ class librenms
   }
 
   class { '::librenms::config':
+    manage_php        => $manage_php,
     system_user       => $user,
     basedir           => $clone_target,
     server_name       => $server_name,
