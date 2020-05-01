@@ -2,15 +2,11 @@
   "name": "puppetfinland-librenms",
   "version": "4.0.4",
   "author": "Puppet-Finland team",
-  "summary": "Setup librenms server and add devices automatically with exported resources",
+  "summary": "Setup librenms server and add devices and services",
   "license": "BSD-2-Clause",
   "source": "https://github.com/Puppet-Finland/puppet-librenms.git",
   "project_page": "https://github.com/Puppet-Finland/puppet-librenms",
   "dependencies": [
-    {
-      "name": "puppetfinland/mysql",
-      "version_requirement": ">= 2.1.0 < 4.0.0"
-    },
     {
       "name": "puppetfinland/os",
       "version_requirement": ">= 0.5.5 < 2.0.0"
