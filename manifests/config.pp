@@ -44,21 +44,12 @@ class librenms::config
         require => Class['::librenms::install'],
     }
 
-    php::module { 'mcrypt':
-        ensure  => 'enabled',
-        require => Class['::librenms::install'],
-    }
-
     Exec {
         user => $::os::params::adminuser,
         path => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin', '/usr/local/bin', '/usr/local/sbin' ],
     }
 
-    if $db_host == 'localhost' {
-        $build_base_php_require = [ File['librenms-config.php'], Class['::librenms::dbserver'] ]
-    } else {
-        $build_base_php_require = File['librenms-config.php']
-    }
+    $build_base_php_require = File['librenms-config.php']
 
     exec { 'librenms-composer_wrapper.php':
         command => "php ${basedir}/scripts/composer_wrapper.php install --no-dev && touch ${basedir}/.composer_wrapper.php-ran",

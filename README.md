@@ -7,12 +7,17 @@ A Puppet module for managing LibreNMS
 The Puppet manifest used by Vagrant
 ([vagrant/librenms.pp](vagrant/librenms.pp)) shows how to
 
-* Setup LibreNMS (install, configuration, permissions, users, etc.)
-* Configure Apache to serve LibreNMS on port 80 (http)
+* Setup LibreNMS (install, configuration, permissions, ACLs, users, etc.)
+* Use puppetlabs-mysql to configure database, user and grants
 * Setup snmpd and create and SNMPv3 user
 * Add the LibreNMS node to LibreNMS
 
-Hints for production
+The manifest used by Vagrant uses two optional features of this module that
+
+* Install the required php packages
+* Configure Apache to serve LibreNMS on port 80 (http)
+
+## Hints for production
 
 To import a node into LibreNMS using exported resources:
 

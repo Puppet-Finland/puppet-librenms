@@ -9,11 +9,8 @@ mod 'puppetlabs-firewall', '1.14.0'
 mod 'puppetfinland-monit',
   :git => 'https://github.com/Puppet-Finland/puppet-monit.git',
   :commit => '5485648cfd7656e73d3200f983cb78a56312862e'
-mod 'puppetfinland-mysql', '3.0.1'
+mod 'puppetlabs-mysql', '8.1.0'
 mod 'puppetfinland-os', '1.1.3'
-mod 'puppetfinland-php',
-  :git => 'https://github.com/Puppet-Finland/puppet-php',
-  :commit => '9116b98ec4bfa171d19c6592b9a2417bfeb53f14'
 mod 'puppet/posix_acl', '1.0.0'
 mod 'puppetfinland-snmpd',
   :git => 'https://github.com/Puppet-Finland/puppet-snmpd.git',
