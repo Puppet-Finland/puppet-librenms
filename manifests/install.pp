@@ -12,6 +12,8 @@ class librenms::install
 )
 {
 
+  $group = $user
+
   # Add libreNMS user
   user {'librenms-user':
     ensure     => 'present',
@@ -39,9 +41,9 @@ class librenms::install
   file { $basedir:
     ensure  => 'directory',
     owner   => $user,
-    group   => $user,
-    mode    => '0750',
-    recurse => true,
+    group   => $group,
+    mode    => '0770',
+    recurse => false,
     require => Vcsrepo['librenms-repo-clone'],
   }
 
@@ -54,7 +56,7 @@ class librenms::install
     posix_acl { $dir:
       action     => set,
       provider   => posixacl,
-      permission => [ 'default:g::rwx', 'g::rwx'],
+      permission => [ "default:group:${group}:rwx", "group:${group}:rwx"],
       recursive  => true,
       require    => [File[$basedir], Package['acl']],
     }
