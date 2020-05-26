@@ -40,8 +40,8 @@ class librenms::install
     ensure  => 'directory',
     owner   => $user,
     group   => $user,
-    mode    => '0750',
-    recurse => true,
+    mode    => '0770',
+    recurse => false,
     require => Vcsrepo['librenms-repo-clone'],
   }
 
