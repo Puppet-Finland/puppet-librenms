@@ -9,6 +9,7 @@ class librenms
 (
   $admin_pass,
   $db_pass,
+  String $php_timezone = 'Etc/UTC',
   Boolean $manage_apache = true,
   Boolean $manage_php = true,
   String $apache_servername = 'librenms.vagrant.example.lan',
@@ -37,6 +38,16 @@ class librenms
               'php-json']:
               ensure => 'present',
               before => Class['::librenms::install'],
+    }
+
+    # validate.php will complain if PHP timezone is missing
+    file { '/etc/php/7.2/cli/conf.d/30-timezone.ini':
+      ensure  => 'present',
+      content => "date.timezone = ${php_timezone}\n",
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      require => Package['php-cli'],
     }
   }
 
