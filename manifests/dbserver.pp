@@ -15,27 +15,27 @@ class librenms::dbserver
 ) inherits librenms::params
 {
 
-  class { '::mysql':
+  class { '::pf_mysql':
     bind_address         => $bind_address,
     allow_addresses_ipv4 => $allow_addresses_ipv4,
     sql_mode             => '',
     root_password        => $root_password,
   }
 
-  class { '::mysql::config::innodb':
+  class { '::pf_mysql::config::innodb':
     file_per_table => true,
   }
 
-  mysql::database { 'librenms':
+  pf_mysql::database { 'librenms':
     use_root_defaults => true,
   }
 
-  mysql::grant { 'librenms':
+  pf_mysql::grant { 'librenms':
     user       => $user,
     host       => $host,
     password   => $password,
     database   => 'librenms',
     privileges => 'ALL',
-    require    => Mysql::Database['librenms'],
+    require    => Pf_mysql::Database['librenms'],
   }
 }
