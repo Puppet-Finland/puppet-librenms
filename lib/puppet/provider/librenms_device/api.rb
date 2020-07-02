@@ -8,14 +8,10 @@ Puppet::Type.type(:librenms_device).provide(:api) do
   defaultfor kernel: 'Linux'
 
   def exists?
-    begin
-      devices_response = RestClient.get "#{resource[:url]}/devices",
+    devices_response = RestClient.get "#{resource[:url]}/devices",
                                         accept: :json,
                                         content_type: :json,
                                         x_auth_token: resource[:auth_token]
-    rescue StandardError
-      raise "LibreNMS get_devices API call failed for resource #{resource[:name]}"
-    end
 
     # Store this resource's parameters in a hash. We can't use self.prefetch
     # for two reasons:
