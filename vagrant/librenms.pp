@@ -4,10 +4,16 @@ $servermonitor = 'hostmaster@vagrant.example.lan'
 $snmp_user = 'librenms'
 # The SNMP password will have to be long enough or you will run into odd issues
 $snmp_pass = 'vagrant123'
+$db_pass = 'vagrant'
+$db_root_pass = 'vagrant'
+$admin_pass = 'vagrant'
+$my_host = 'librenms.vagrant.example.lan'
+$my_ip = '192.168.152.10'
+$admin_email = 'hostmaster@vagrant.example.lan'
 
-host { 'librenms.vagrant.example.lan':
+host { $my_host:
   ensure => 'present',
-  ip     => '192.168.152.10',
+  ip     => $my_ip,
   target => '/etc/hosts',
 }
 
@@ -17,7 +23,7 @@ package { 'git':
 }
 
 class { '::mysql::server':
-  root_password    => 'vagrant',
+  root_password    => $db_root_pass,
   restart          => true,
   override_options => { 'server' => { 'bind_address' => '127.0.0.1' } },
   before           => Class['::librenms::config'],
@@ -25,7 +31,7 @@ class { '::mysql::server':
 
 ::mysql::db { 'librenms':
   user     => 'librenms',
-  password => 'vagrant',
+  password => $db_pass,
   host     => 'localhost',
   grant    => ['ALL'],
   before   => Class['::librenms::config'],
@@ -35,9 +41,9 @@ class { '::mysql::server':
 class { '::librenms':
   manage_php     => true,
   manage_apache  => true,
-  admin_pass     => 'vagrant',
-  db_pass        => 'vagrant',
-  admin_email    => 'hostmaster@vagrant.example.lan',
+  admin_pass     => $admin_pass,
+  db_pass        => $db_pass,
+  admin_email    => $admin_email,
   poller_modules => {
     'os'              => 1,
     'processors'      => 1,
