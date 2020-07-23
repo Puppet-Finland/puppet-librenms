@@ -5,6 +5,7 @@
 #
 class librenms::install
 (
+  String  $version,
   String  $user,
   String  $clone_source,
   String  $basedir,
@@ -25,6 +26,7 @@ class librenms::install
 
   vcsrepo { 'librenms-repo-clone':
     ensure   => present,
+    revision => $version,
     path     => $basedir,
     provider => 'git',
     source   => $::librenms::clone_source,
@@ -69,4 +71,11 @@ class librenms::install
   }
 
   ensure_packages($::librenms::params::dependency_packages, {'ensure' => 'present'})
+  ensure_packages($::librenms::params::dependency_pip3_packages,
+    {
+      'ensure'   => 'present',
+      'provider' => 'pip3',
+      require    => Package['python3-pip']
+    }
+  )
 }

@@ -1,19 +1,8 @@
 notify { 'Provisioning LibreNMS': }
 
-$servermonitor = 'hostmaster@vagrant.example.lan'
-$snmp_user = 'librenms'
-# The SNMP password will have to be long enough or you will run into odd issues
-$snmp_pass = 'vagrant123'
-$db_pass = 'vagrant'
-$db_root_pass = 'vagrant'
-$admin_pass = 'vagrant'
-$my_host = 'librenms.vagrant.example.lan'
-$my_ip = '192.168.152.10'
-$admin_email = 'hostmaster@vagrant.example.lan'
-
-host { $my_host:
+host { $::my_host:
   ensure => 'present',
-  ip     => $my_ip,
+  ip     => $::my_ip,
   target => '/etc/hosts',
 }
 
@@ -23,27 +12,30 @@ package { 'git':
 }
 
 class { '::mysql::server':
-  root_password    => $db_root_pass,
+  root_password    => $::db_root_pass,
   restart          => true,
-  override_options => { 'server' => { 'bind_address' => '127.0.0.1' } },
+  override_options => { 'server' => { 'bind_address' => '127.0.0.1' } },
   before           => Class['::librenms::config'],
 }
 
-::mysql::db { 'librenms':
+::mysql::db { 'librenms':
   user     => 'librenms',
-  password => $db_pass,
+  password => $::db_pass,
   host     => 'localhost',
   grant    => ['ALL'],
+  charset  => 'utf8',
+  collate  => 'utf8_unicode_ci',
   before   => Class['::librenms::config'],
   require  => Class['::mysql::server'],
 }
 
 class { '::librenms':
+  version        => $::librenms_version,
   manage_php     => true,
   manage_apache  => true,
-  admin_pass     => $admin_pass,
-  db_pass        => $db_pass,
-  admin_email    => $admin_email,
+  admin_pass     => $::admin_pass,
+  db_pass        => $::db_pass,
+  admin_email    => $::admin_email,
   poller_modules => {
     'os'              => 1,
     'processors'      => 1,
@@ -59,12 +51,20 @@ class { '::librenms':
   },
 }
 
+file { '/opt/librenms/librenms-extra-config.php':
+  ensure  => 'present',
+  source  => $::librenms_extra_config_file,
+  owner   => 'librenms',
+  group   => 'librenms',
+  require => Class['::librenms'],
+}
+
 class { '::snmpd':
   manage_packetfilter => false,
 }
 
-::snmpd::user { $snmp_user:
-  pass => $snmp_pass,
+::snmpd::user { $::snmp_user:
+  pass => $::snmp_pass,
 }
 
 # Add this node to LibreNMS. The realize => true makes the Exec run directly on
@@ -72,11 +72,11 @@ class { '::snmpd':
 #
 class { '::librenms::device':
   proto   => 'v3',
-  user    => $snmp_user,
-  pass    => $snmp_pass,
+  user    => $::snmp_user,
+  pass    => $::snmp_pass,
   realize => true,
   # Ensure that LibreNMS is fully setup before we try to add this node this it
-  require => [ Snmpd::User[$snmp_user], Class['::librenms'], ],
+  require => [ Snmpd::User[$::snmp_user], Class['::librenms'], ],
 }
 
 # This is needed when experimenting with LibreNMS service checks

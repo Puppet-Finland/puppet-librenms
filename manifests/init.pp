@@ -9,6 +9,7 @@ class librenms
 (
   $admin_pass,
   $db_pass,
+  $version = 'master',
   String $php_timezone = 'Etc/UTC',
   Boolean $manage_apache = true,
   Boolean $manage_php = true,
@@ -57,6 +58,7 @@ class librenms
   }
 
   class { '::librenms::install':
+    version              => $version,
     user                 => $user,
     clone_source         => $clone_source,
     basedir              => $clone_target,

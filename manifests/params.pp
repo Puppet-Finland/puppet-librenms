@@ -17,12 +17,15 @@ class librenms::params {
         'whois',
         'mtr-tiny',
         'nmap',
-        'python-mysqldb',
         'rrdtool',
         'snmp',
         'php-mail',
-        'php-net-smtp'
+        'php-net-smtp',
+        'python3-dotenv',
+        'python3-pip',
+        'python3-pymysql'
       ]
+      $dependency_pip3_packages = [ 'redis' ]
     }
     default: {
       fail("Unsupported OS: ${::osfamily}")
