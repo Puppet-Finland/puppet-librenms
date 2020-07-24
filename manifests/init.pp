@@ -13,6 +13,7 @@ class librenms
   String $php_timezone = 'Etc/UTC',
   Boolean $manage_apache = true,
   Boolean $manage_php = true,
+  Boolean $ssl = false,
   String $apache_servername = 'librenms.vagrant.example.lan',
   $user = 'librenms',
   $server_name = $::fqdn,
@@ -82,39 +83,9 @@ class librenms
   }
 
   if $manage_apache {
-    class { '::apache':
-      purge_configs => true,
-      default_vhost => false,
-      mpm_module    => 'prefork',
-    }
-
-    include ::apache::mod::php
-    include ::apache::mod::headers
-    include ::apache::mod::rewrite
-
-    apache::vhost { 'librenms':
-      servername      => $apache_servername,
-      port            => '80',
-      docroot         => '/opt/librenms/html',
-      docroot_owner   => 'librenms',
-      docroot_group   => 'librenms',
-      proxy_pass      =>
-      [
-        {
-          'path' => '/opt/librenms/html/',
-          'url'  => '!',
-        }
-      ],
-      directories     =>
-        [
-          {
-            'path'           => '/opt/librenms/html/',
-            'options'        => [ 'Indexes', 'FollowSymLinks', 'MultiViews' ],
-            'allow_override' => 'All'
-          }
-        ],
-      request_headers =>  [ 'set X-Forwarded-Proto "http"', 'set X-Forwarded-Port "80"' ],
-      headers         => [ 'always set Strict-Transport-Security "max-age=15768000; includeSubDomains; preload"' ],
+    class { '::librenms::apache':
+      servername => $apache_servername,
+      ssl        => $ssl,
     }
   }
 

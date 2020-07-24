@@ -33,6 +33,7 @@ class { '::librenms':
   version        => $::librenms_version,
   manage_php     => true,
   manage_apache  => true,
+  ssl            => true,
   admin_pass     => $::admin_pass,
   db_pass        => $::db_pass,
   admin_email    => $::admin_email,
