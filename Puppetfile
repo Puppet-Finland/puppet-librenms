@@ -14,7 +14,7 @@ mod 'puppetfinland-os', '1.1.3'
 mod 'puppet/posix_acl', '1.0.0'
 mod 'puppetfinland-snmpd',
   :git => 'https://github.com/Puppet-Finland/puppet-snmpd.git',
-  :commit => 'a4e7477c61230a85171caba4fc3b3faa27d5b9ad'
+  :commit => '774984be1449c8b6ba3b7735da2eab4e984f7a8f'
 mod 'puppetlabs-stdlib', '4.25.1'
 mod 'camptocamp-systemd',
   :git => 'https://github.com/Puppet-Finland/puppet-systemd-1.git',

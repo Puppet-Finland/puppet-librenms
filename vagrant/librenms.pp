@@ -62,6 +62,7 @@ file { '/opt/librenms/librenms-extra-config.php':
 
 class { '::snmpd':
   manage_packetfilter => false,
+  puppet_headers      => false,
 }
 
 ::snmpd::user { $::snmp_user:
