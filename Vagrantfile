@@ -16,6 +16,10 @@ Vagrant.configure("2") do |config|
         box.vm.provision "shell", path: "vagrant/debian.sh"
         box.vm.provision "shell", path: "vagrant/common.sh"
         box.vm.provision "shell",
+            inline: "/opt/puppetlabs/bin/puppet apply /vagrant/vagrant/hosts.pp --modulepath=/vagrant/modules",
+            env: {  'FACTER_my_host': 'librenms.vagrant.example.lan',
+                    'FACTER_my_ip': '192.168.152.10' }
+        box.vm.provision "shell",
             inline: "/opt/puppetlabs/bin/puppet apply /vagrant/vagrant/librenms.pp --modulepath=/vagrant/modules",
             env: {  # Version 1.65. Tags do not seem to work correctly with
                     # our particular version of puppetlabs-vcsrepo.
@@ -29,8 +33,6 @@ Vagrant.configure("2") do |config|
                     'FACTER_db_pass':                    'vagrant',
                     'FACTER_db_root_pass':               'vagrant',
                     'FACTER_admin_pass':                 'vagrant',
-                    'FACTER_my_host':                    'librenms.vagrant.example.lan',
-                    'FACTER_my_ip':                      '192.168.152.10',
                     'FACTER_admin_email':                'hostmaster@vagrant.example.lan' }
 
         # Work around permission issues reported by validate.php that are very

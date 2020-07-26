@@ -1,11 +1,5 @@
 notify { 'Provisioning LibreNMS': }
 
-host { $::my_host:
-  ensure => 'present',
-  ip     => $::my_ip,
-  target => '/etc/hosts',
-}
-
 package { 'git':
   ensure => 'present',
   before => Class['::librenms::install'],
