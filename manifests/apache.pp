@@ -8,8 +8,8 @@
 #
 class librenms::apache
 (
-  String  $servername,
-  Boolean $ssl
+  Optional[String] $servername,
+  Boolean          $ssl
 )
 {
   class { '::apache':

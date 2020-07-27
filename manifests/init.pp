@@ -14,7 +14,7 @@ class librenms
   Boolean $manage_apache = true,
   Boolean $manage_php = true,
   Boolean $ssl = false,
-  String $apache_servername = 'librenms.vagrant.example.lan',
+  Optional[String] $apache_servername = undef,
   $user = 'librenms',
   $server_name = $::fqdn,
   $clone_source = $::librenms::params::clone_source,
