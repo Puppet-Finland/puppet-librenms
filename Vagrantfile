@@ -39,4 +39,28 @@ Vagrant.configure("2") do |config|
     # tricky to fix with Puppet which wants to check and maintain state.
     box.vm.provision "shell", path: "vagrant/cleanup.sh"
   end
+
+  config.vm.define "librenms-bionic-aws" do |box|
+    # Create an empty file to keep vagrant-aws happy
+    dummy_keypair_path = "/tmp/.librenms-bionic-aws-dummy-keypair"
+    dummy_keypair = File.new(dummy_keypair_path, "w")
+    dummy_keypair.close
+
+    # Set dummy values to allow this Vagrantfile to work even if these are unset
+    aws_ami = ENV['AWS_AMI'] ? ENV['AWS_AMI'] : "invalid"
+    aws_keypair_name = ENV['AWS_KEYPAIR_NAME'] ? ENV['AWS_KEYPAIR_NAME'] : "invalid"
+    aws_region = ENV['AWS_DEFAULT_REGION'] ? ENV['AWS_DEFAULT_REGION'] : "us-east-1"
+    ssh_private_key_path = ENV['SSH_PRIVATE_KEY_PATH'] ? ENV['SSH_PRIVATE_KEY_PATH'] : dummy_keypair_path
+
+    box.vm.box = "dummy"
+    box.vm.hostname = "librenms.local"
+    box.vm.provider :aws do |aws, override|
+      aws.ami = aws_ami
+      aws.keypair_name = aws_keypair_name
+      aws.region = aws_region
+      aws.tags = { 'Name' => 'librenms-bionic-aws' }
+      override.ssh.username = "ubuntu"
+      override.ssh.private_key_path = ssh_private_key_path
+    end
+  end
 end
