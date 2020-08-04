@@ -24,14 +24,14 @@ class { '::mysql::server':
 }
 
 class { '::librenms':
-  version        => $::librenms_version,
-  manage_php     => true,
-  manage_apache  => true,
-  ssl            => true,
-  admin_pass     => $::admin_pass,
-  db_pass        => $::db_pass,
-  admin_email    => $::admin_email,
-  poller_modules => {
+  version           => $::librenms_version,
+  manage_php        => true,
+  manage_apache     => true,
+  ssl               => true,
+  admin_pass        => $::admin_pass,
+  db_pass           => $::db_pass,
+  admin_email       => $::admin_email,
+  poller_modules    => {
     'os'              => 1,
     'processors'      => 1,
     'mempools'        => 1,
@@ -44,6 +44,7 @@ class { '::librenms':
     'ucd-diskio'      => 1,
     'entity-physical' => 1,
   },
+  extra_config_file => $::librenms_extra_config_file,
 }
 
 file { '/opt/librenms/librenms-extra-config.php':
