@@ -44,7 +44,7 @@ class { '::librenms':
     'ucd-diskio'      => 1,
     'entity-physical' => 1,
   },
-  extra_config_file => $::librenms_extra_config_file,
+  extra_config_file => '/opt/librenms/librenms-extra-config.php',
 }
 
 file { '/opt/librenms/librenms-extra-config.php':
