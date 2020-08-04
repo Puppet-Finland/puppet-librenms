@@ -15,6 +15,7 @@ Vagrant.configure("2") do |config|
     box.vm.network "private_network", ip: "192.168.152.10"
     box.vm.provision "shell", path: "vagrant/debian.sh"
     box.vm.provision "shell", path: "vagrant/common.sh"
+    box.vm.provision "shell", inline: "/usr/bin/apt-get update"
     box.vm.provision "shell",
       inline: "/opt/puppetlabs/bin/puppet apply /vagrant/vagrant/hosts.pp --modulepath=/vagrant/modules",
       env: {  'FACTER_my_host': 'librenms.vagrant.example.lan',
@@ -26,15 +27,17 @@ Vagrant.configure("2") do |config|
               'FACTER_librenms_version':           '8a6de3ef233421be1962efb896cafc96e8f3dc20',
               'FACTER_librenms_extra_config_file': '/vagrant/vagrant/librenms-extra-config.php',
               'FACTER_servermonitor':              'hostmaster@vagrant.example.lan',
-              'FACTER_snmp_user':                  'librenms',
-              # The SNMP password will have to be long enough or you will run
-              # into odd issues
-              'FACTER_snmp_pass':                  'vagrant123',
               'FACTER_db_pass':                    'vagrant',
               'FACTER_db_root_pass':               'vagrant',
               'FACTER_admin_pass':                 'vagrant',
               'FACTER_admin_email':                'hostmaster@vagrant.example.lan' }
-
+    box.vm.provision "shell",
+      inline: "/opt/puppetlabs/bin/puppet apply /vagrant/vagrant/snmp.pp --modulepath=/vagrant/modules",
+      env: {  'FACTER_servermonitor': 'hostmaster@vagrant.example.lan',
+              'FACTER_snmp_user':     'librenms',
+              # The SNMP password will have to be long enough or you will run
+              # into odd issues
+              'FACTER_snmp_pass':     'vagrant123' }
     # Work around permission issues reported by validate.php that are very
     # tricky to fix with Puppet which wants to check and maintain state.
     box.vm.provision "shell", path: "vagrant/cleanup.sh"
@@ -49,6 +52,8 @@ Vagrant.configure("2") do |config|
     # Set dummy values to allow this Vagrantfile to work even if these are unset
     aws_ami = ENV['AWS_AMI'] ? ENV['AWS_AMI'] : "invalid"
     aws_keypair_name = ENV['AWS_KEYPAIR_NAME'] ? ENV['AWS_KEYPAIR_NAME'] : "invalid"
+    aws_secret_access_key = ENV['AWS_SECRET_ACCESS_KEY'] ? ENV['AWS_SECRET_ACCESS_KEY'] : "invalid"
+    aws_access_key_id = ENV['AWS_ACCESS_KEY_ID'] ? ENV['AWS_ACCESS_KEY_ID'] : "invalid"
     aws_region = ENV['AWS_DEFAULT_REGION'] ? ENV['AWS_DEFAULT_REGION'] : "us-east-1"
     ssh_private_key_path = ENV['SSH_PRIVATE_KEY_PATH'] ? ENV['SSH_PRIVATE_KEY_PATH'] : dummy_keypair_path
 
@@ -57,6 +62,8 @@ Vagrant.configure("2") do |config|
     box.vm.provider :aws do |aws, override|
       aws.ami = aws_ami
       aws.keypair_name = aws_keypair_name
+      aws.secret_access_key = aws_secret_access_key
+      aws.access_key_id = aws_access_key_id
       aws.region = aws_region
       aws.tags = { 'Name' => 'librenms-bionic-aws' }
       override.ssh.username = "ubuntu"

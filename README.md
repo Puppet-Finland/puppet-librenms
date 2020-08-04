@@ -95,7 +95,7 @@ instance from scratch should be as easy as:
 
     $ vagrant up
 
-LibreNMS UI can be reached via http://192.168.152.10/librenms. Username is
+LibreNMS UI can be reached via https://192.168.152.10. Username is
 "admin" and password is "vagrant". The instance adds itself to LibreNMS, so you should see
 one device, "librenms.vagrant.example.lan" under devices.
 

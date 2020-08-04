@@ -54,27 +54,6 @@ file { '/opt/librenms/librenms-extra-config.php':
   require => Class['::librenms'],
 }
 
-class { '::snmpd':
-  manage_packetfilter => false,
-  puppet_headers      => false,
-}
-
-::snmpd::user { $::snmp_user:
-  pass => $::snmp_pass,
-}
-
-# Add this node to LibreNMS. The realize => true makes the Exec run directly on
-# this node instead of getting exported (which does not work with puppet apply)
-#
-class { '::librenms::device':
-  proto   => 'v3',
-  user    => $::snmp_user,
-  pass    => $::snmp_pass,
-  realize => true,
-  # Ensure that LibreNMS is fully setup before we try to add this node this it
-  require => [ Snmpd::User[$::snmp_user], Class['::librenms'], ],
-}
-
 # This is needed when experimenting with LibreNMS service checks
 package { 'monitoring-plugins':
   ensure => 'present',
