@@ -30,7 +30,7 @@ class librenms::config
 
     # The LibreNMS-specific rrdcached service will only work on systemd distros 
     # at the moment.
-    if str2bool($::has_systemd) {
+    if $::systemd {
         $rrdcached_line = "\$config['rrdcached'] = \"unix:/run/rrdcached.sock\";"
     } else {
         $rrdcached_line = '# rrdcached disabled by Puppet because this is not a systemd distro'

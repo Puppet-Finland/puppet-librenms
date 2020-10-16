@@ -13,7 +13,7 @@ class librenms::rrdcached
 
   ensure_resource('package', 'rrdcached', { 'ensure' => 'present' })
 
-  if str2bool($::has_systemd) {
+  if $::systemd {
 
     file { 'librenms-etc-default-rrdcached':
       ensure  => 'present',
