@@ -6,6 +6,7 @@
   "license": "BSD-2-Clause",
   "source": "https://github.com/Puppet-Finland/puppet-librenms.git",
   "project_page": "https://github.com/Puppet-Finland/puppet-librenms",
+  "issues_url": "https://github.com/Puppet-Finland/puppet-librenms/issues",
   "dependencies": [
     {
       "name": "puppetfinland/os",
@@ -17,7 +18,7 @@
     },
     {
       "name": "camptocamp/systemd",
-      "version_requirement": ">= 2.0.0"
+      "version_requirement": ">= 2.0.0 < 3.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
@@ -35,10 +36,10 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.7.0 < 6.0.0"
+      "version_requirement": ">= 4.7.0 < 7.0.0"
     }
   ],
-  "pdk-version": "1.13.0",
-  "template-url": "pdk-default#1.13.0",
-  "template-ref": "1.13.0-0-g66e1443"
+  "pdk-version": "1.18.1",
+  "template-url": "pdk-default#1.18.1",
+  "template-ref": "tags/1.18.1-0-g3d2e75c"
 }
