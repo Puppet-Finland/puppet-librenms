@@ -40,3 +40,4 @@
 /.yardopts
 /spec/
 /.vscode/
+*.log
