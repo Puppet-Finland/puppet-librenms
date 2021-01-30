@@ -3,7 +3,7 @@
 
 forge 'https://forgeapi.puppetlabs.com'
 
-mod 'puppetlabs-apache', '5.4.0'
+mod 'puppetlabs-apache', '5.9.0'
 mod 'puppetlabs-concat', '5.1.0'
 mod 'puppetlabs-firewall', '1.14.0'
 mod 'puppetfinland-monit',
