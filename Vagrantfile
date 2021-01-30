@@ -1,17 +1,5 @@
 # -*- mode: ruby -*-
 
-# Workaround https://github.com/mitchellh/vagrant-aws/issues/566
-class Hash
-  def slice(*keep_keys)
-    h = {}
-    keep_keys.each { |key| h[key] = fetch(key) if has_key?(key) }
-    h
-  end unless Hash.method_defined?(:slice)
-  def except(*less_keys)
-    slice(*keys - less_keys)
-  end unless Hash.method_defined?(:except)
-end
-
 Vagrant.configure("2") do |config|
   config.hostmanager.manage_host = true
   config.hostmanager.manage_guest = false
@@ -100,33 +88,5 @@ Vagrant.configure("2") do |config|
     # Work around permission issues reported by validate.php that are very
     # tricky to fix with Puppet which wants to check and maintain state.
     box.vm.provision "shell", path: "vagrant/cleanup.sh"
-  end
-
-  config.vm.define "librenms-bionic-aws" do |box|
-    # Create an empty file to keep vagrant-aws happy
-    dummy_keypair_path = "/tmp/.librenms-bionic-aws-dummy-keypair"
-    dummy_keypair = File.new(dummy_keypair_path, "w")
-    dummy_keypair.close
-
-    # Set dummy values to allow this Vagrantfile to work even if these are unset
-    aws_ami = ENV['AWS_AMI'] ? ENV['AWS_AMI'] : "invalid"
-    aws_keypair_name = ENV['AWS_KEYPAIR_NAME'] ? ENV['AWS_KEYPAIR_NAME'] : "invalid"
-    aws_secret_access_key = ENV['AWS_SECRET_ACCESS_KEY'] ? ENV['AWS_SECRET_ACCESS_KEY'] : "invalid"
-    aws_access_key_id = ENV['AWS_ACCESS_KEY_ID'] ? ENV['AWS_ACCESS_KEY_ID'] : "invalid"
-    aws_region = ENV['AWS_DEFAULT_REGION'] ? ENV['AWS_DEFAULT_REGION'] : "us-east-1"
-    ssh_private_key_path = ENV['SSH_PRIVATE_KEY_PATH'] ? ENV['SSH_PRIVATE_KEY_PATH'] : dummy_keypair_path
-
-    box.vm.box = "dummy"
-    box.vm.hostname = "librenms.local"
-    box.vm.provider :aws do |aws, override|
-      aws.ami = aws_ami
-      aws.keypair_name = aws_keypair_name
-      aws.secret_access_key = aws_secret_access_key
-      aws.access_key_id = aws_access_key_id
-      aws.region = aws_region
-      aws.tags = { 'Name' => 'librenms-bionic-aws' }
-      override.ssh.username = "ubuntu"
-      override.ssh.private_key_path = ssh_private_key_path
-    end
   end
 end

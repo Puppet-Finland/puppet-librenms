@@ -101,33 +101,3 @@ one device, "librenms.vagrant.example.lan" under devices.
 
 If you want to use snmpwalk note that the username is "librenms" and password
 is "vagrant123".
-
-# Testing AWS AMI images created with Packer
-
-We use [vagrant-aws](https://github.com/mitchellh/vagrant-aws) Vagrant plugin
-to ease testing of packer-generated LibreNMS AMI images. First you need to
-setup vagrant-aws as per documentation:
-
-    $ vagrant plugin install vagrant-aws
-    $ vagrant box add dummy https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box
-
-Then make sure that the following standard AWS environment variables are set:
-
-* AWS_SECRET_ACCESS_KEY
-* AWS_ACCESS_KEY_ID
-
-Optionally you can also set
-
-* AWS_DEFAULT_REGION: define which region Vagrant creates the instance to
-
-There are a few non-standard environment variables you need to set as well:
-
-* AWS_AMI: the AMI ID that has puppetmaster-installer preconfigured
-* AWS_KEY_PAIR_NAME: the name of the SSH keypair at the AWS end
-* SSH_PRIVATE_KEY_PATH: path to the SSH private key matching the SSH keypair name, above
-
-Once all these are set, you can use create, connect to and destroy the AWS instances as needed:
-
-    $ AWS_AMI=<ami-id> vagrant up librenms-bionic-aws
-    $ vagrant ssh librenms-bionic-aws
-    $ vagrant destroy librenms-bionic-aws
