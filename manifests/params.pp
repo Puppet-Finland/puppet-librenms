@@ -26,6 +26,10 @@ class librenms::params {
         'python3-pymysql'
       ]
       $dependency_pip3_packages = [ 'redis' ]
+      $php_version = $::lsbdistcodename ? {
+        'bionic' => '7.2',
+        'focal'  => '7.4',
+      }
     }
     default: {
       fail("Unsupported OS: ${::osfamily}")

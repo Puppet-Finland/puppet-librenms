@@ -43,7 +43,7 @@ class librenms
     }
 
     # validate.php will complain if PHP timezone is missing
-    file { '/etc/php/7.2/cli/conf.d/30-timezone.ini':
+    file { "/etc/php/${::librenms::params::php_version}/cli/conf.d/30-timezone.ini":
       ensure  => 'present',
       content => "date.timezone = ${php_timezone}\n",
       owner   => 'root',
