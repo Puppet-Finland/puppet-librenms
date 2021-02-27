@@ -22,51 +22,48 @@ class librenms::apache
   include ::apache::mod::headers
   include ::apache::mod::rewrite
 
-  $default_vhost_params = $ssl ? {
-    true   => { 'port'            => 443,
-                'ssl'             => true,
-                'ssl_cert'        => '/etc/ssl/certs/ssl-cert-snakeoil.pem',
-                'ssl_key'         => '/etc/ssl/private/ssl-cert-snakeoil.key',
-                'request_headers' =>  [ 'set X-Forwarded-Proto "https"', 'set X-Forwarded-Port "443"' ], },
-    default => {'port' => 80,
-                'request_headers' => [ 'set X-Forwarded-Proto "http"', 'set X-Forwarded-Port "80"' ], },
-
+  $https_virtualhost_ensure = $ssl ? {
+    true    => 'present',
+    default => 'absent',
   }
 
-  if $ssl {
-    apache::vhost { 'librenms-nossl':
-      # Redirect all HTTP requests to HTTPS
-      servername      => $servername,
-      port            => 80,
-      docroot         => '/opt/librenms/html',
-      redirect_status => 'permanent',
-      redirect_dest   => "https://${servername}/",
-    }
-  }
-
-  apache::vhost { 'librenms':
-    servername            => $servername,
-    docroot               => '/opt/librenms/html',
-    docroot_owner         => 'librenms',
-    docroot_group         => 'librenms',
-    allow_encoded_slashes => 'nodecode',
-    proxy_pass            =>
-    [
-      {
-        'path' => '/opt/librenms/html/',
-        'url'  => '!',
-      }
-    ],
-    directories           =>
+  apache::vhost {
+    default:
+      servername            => $servername,
+      docroot               => '/opt/librenms/html',
+      docroot_owner         => 'librenms',
+      docroot_group         => 'librenms',
+      allow_encoded_slashes => 'nodecode',
+      proxy_pass            =>
       [
         {
-          'path'           => '/opt/librenms/html/',
-          'require'        => 'all granted',
-          'options'        => ['FollowSymLinks', 'MultiViews'],
-          'allow_override' => 'All',
+          'path' => '/opt/librenms/html/',
+          'url'  => '!',
         }
       ],
-    headers               => [ 'always set Strict-Transport-Security "max-age=15768000; includeSubDomains; preload"' ],
-    *                     => $default_vhost_params,
+      directories           =>
+        [
+          {
+            'path'           => '/opt/librenms/html/',
+            'require'        => 'all granted',
+            'options'        => ['FollowSymLinks', 'MultiViews'],
+            'allow_override' => 'All',
+          }
+        ],
+    ;
+    ['librenms-https']:
+      ensure          => $https_virtualhost_ensure,
+      port            => 443,
+      ssl             => true,
+      ssl_cert        => '/etc/ssl/certs/ssl-cert-snakeoil.pem',
+      ssl_key         => '/etc/ssl/private/ssl-cert-snakeoil.key',
+      request_headers => [ 'set X-Forwarded-Proto "https"', 'set X-Forwarded-Port "443"' ],
+      headers         => [ 'always set Strict-Transport-Security "max-age=15768000; includeSubDomains; preload"' ]
+    ;
+    ['librenms-http']:
+      ensure          => 'present',
+      port            => 80,
+      request_headers => [ 'set X-Forwarded-Proto "http"', 'set X-Forwarded-Port "80"' ]
+    ;
   }
 }
