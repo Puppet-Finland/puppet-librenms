@@ -12,6 +12,7 @@ class librenms
   $version = 'master',
   String $php_timezone = 'Etc/UTC',
   Boolean $manage_apache = true,
+  Boolean $install_cron = true,
   Boolean $manage_php = true,
   Boolean $ssl = false,
   Optional[String] $apache_servername = undef,
@@ -33,6 +34,12 @@ class librenms
 
 ) inherits librenms::params
 {
+
+  if $install_cron {
+    package { 'cron':
+      ensure => 'present',
+    }
+  }
 
   if $manage_php {
     package {['php-mysql', 'php-gd', 'php-cli', 'php-pear', 'php-curl',
