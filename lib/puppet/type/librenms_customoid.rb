@@ -63,6 +63,13 @@ module Puppet
       desc 'Name of this OID'
     end
 
+    newparam(:device_id) do
+      desc 'Device ID'
+      validate do |device_id|
+        raise('Parameter device_id must be an integer') unless device_id.is_a?(Integer)
+      end
+    end
+
     newproperty(:descr) do
       desc 'A description of the OID'
       validate do |descr|
@@ -79,6 +86,7 @@ module Puppet
 
     newproperty(:datatype) do
       desc 'Data type for this Custom OID'
+      defaultto :GAUGE
       newvalues(:GAUGE, :COUNTER)
     end
 
