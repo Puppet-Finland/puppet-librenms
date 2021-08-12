@@ -59,6 +59,10 @@ module Puppet
       end
     end
 
+    newparam(:name, namevar: true) do
+      desc 'Name of this OID'
+    end
+
     newproperty(:descr) do
       desc 'A description of the OID'
       validate do |descr|
