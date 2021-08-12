@@ -6,6 +6,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   def exists?
     @DB = Sequel.connect("mysql2://#{resource[:username]}:#{resource[:password]}@#{resource[:host]}:#{resource[:port]}/#{resource[:database]}")
     @customoids = @DB.from(:customoids)
+    @DB.sql_log_level = :debug
 
     case @customoids.where(device_id: resource[:device_id], customoid_oid: resource[:oid]).entries.size
     when 1
@@ -18,7 +19,24 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def create
-    true
+    begin
+      @customoids.insert(device_id: resource[:device_id],
+                         customoid_descr: resource[:descr],
+                         customoid_oid: resource[:oid],
+                         customoid_datatype: resource[:datatype],
+                         customoid_unit: resource[:unit],
+                         customoid_divisor: resource[:divisor],
+                         customoid_multiplier: resource[:multiplier],
+                         customoid_limit: resource[:limit],
+                         customoid_limit_warn: resource[:limit_warn],
+                         customoid_limit_low: resource[:limit_low],
+                         customoid_limit_low_warn: resource[:limit_low_warn],
+                         customoid_alert: resource[:alert],
+                         user_func: resource[:user_func])
+    rescue Sequel::DatabaseError => e
+      puts e.message
+    end
+
   end
 
   def destroy

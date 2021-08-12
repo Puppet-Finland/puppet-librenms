@@ -86,8 +86,13 @@ module Puppet
 
     newproperty(:datatype) do
       desc 'Data type for this Custom OID'
-      defaultto :GAUGE
-      newvalues(:GAUGE, :COUNTER)
+      defaultto 'gauge'
+      validate do |datatype|
+        raise('Property datatype must be gauge or counter') unless ['gauge','counter'].include?(datatype)
+      end
+      munge do |value|
+        value.upcase
+      end
     end
 
     newproperty(:unit) do
@@ -147,7 +152,9 @@ module Puppet
 
     newproperty(:alert) do
       desc 'Alerts for this OID enabled'
-      newvalues(0, 1)
+      validate do |alert|
+        raise('Property alert must be 0 or 1') unless [0,1].include?(alert)
+      end
     end
 
     newproperty(:user_func) do
