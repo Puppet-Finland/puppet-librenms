@@ -11,7 +11,16 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
     # Hash that contains this Custom OID's real state as opposed to desired state
     @my_properties = {}
 
-    entries = @customoids.where(device_id: resource[:device_id], customoid_oid: resource[:oid]).entries
+    # Map hostname or sysname to device_id. The type ensures that only one of those two can be set.
+    if resource[:hostname]
+      @id = hostname_to_device_id(resource[:hostname])
+    elsif resource[:sysname]
+      @id = sysname_to_device_id(resource[:sysname])
+    else
+      raise "ERROR: hostname or sysname not set!"
+    end
+
+    entries = @customoids.where(device_id: @id, customoid_oid: resource[:oid]).entries
     case entries.size
     when 1
       @my_properties = entries[0]
@@ -25,7 +34,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
 
   def create
     begin
-      @customoids.insert(device_id: resource[:device_id],
+      @customoids.insert(device_id: @id,
                          customoid_descr: resource[:descr],
                          customoid_oid: resource[:oid],
                          customoid_datatype: resource[:datatype],
@@ -50,13 +59,33 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def destroy
-    @customoids.where(device_id: resource[:device_id], customoid_oid: resource[:oid]).delete
+    @customoids.where(device_id: @id, customoid_oid: resource[:oid]).delete
   end
 
   def update_field(field, value)
     value = 'NULL' if value.nil?
     change = { field => value }
-    @customoids.where(device_id: resource[:device_id], customoid_oid: resource[:oid]).update(change)
+    @customoids.where(device_id: @id, customoid_oid: resource[:oid]).update(change)
+  end
+
+  def device_id(field, value)
+    @devices = @DB.from(:devices)
+    res = @devices.where({ field => value }).entries
+    if res.size == 1
+      res[0][:device_id]
+    elsif res.size == 0
+      raise "ERROR: did not get any results when looking for field #{field} with value #{value} from tables \"devices\"" 
+    else
+      raise "ERROR: got more than one result when looking for field #{field} with value #{value} from tables \"devices\""
+    end
+  end
+
+  def hostname_to_device_id(hostname)
+    device_id(:hostname, hostname)
+  end
+
+  def sysname_to_device_id(sysname)
+    device_id(:sysName, sysname)
   end
 
   def descr

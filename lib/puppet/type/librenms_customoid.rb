@@ -63,10 +63,17 @@ module Puppet
       desc 'Name of this OID'
     end
 
-    newparam(:device_id) do
-      desc 'Device ID'
-      validate do |device_id|
-        raise('Parameter device_id must be an integer') unless device_id.is_a?(Integer)
+    newparam(:hostname) do
+      desc 'Hostname to bind this Custom OID to; must be unique in the devices table'
+      validate do |hostname|
+        raise('Parameter hostname must be a string') unless hostname.is_a?(String)
+      end
+    end
+
+    newparam(:sysname) do
+      desc 'sysName to bind this Custom OID to; must be unique in the devices table'
+      validate do |sysname|
+        raise('Parameter sysname must be a string') unless sysname.is_a?(String)
       end
     end
 
@@ -161,6 +168,12 @@ module Puppet
       desc 'User function to apply to value'
       validate do |user_func|
         raise('Property user_func must be a string') unless user_func.is_a?(String)
+      end
+    end
+
+    validate do
+      if ! (self[:hostname] || self[:sysname]) || (self[:hostname] && self[:sysname])
+        raise "ERROR: must define either hostname or sysname!"
       end
     end
   end
