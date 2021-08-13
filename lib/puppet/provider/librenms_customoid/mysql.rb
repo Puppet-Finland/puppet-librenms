@@ -8,8 +8,13 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
     @customoids = @DB.from(:customoids)
     @DB.sql_log_level = :debug
 
-    case @customoids.where(device_id: resource[:device_id], customoid_oid: resource[:oid]).entries.size
+    # Hash that contains this Custom OID's real state as opposed to desired state
+    @my_properties = {}
+
+    entries = @customoids.where(device_id: resource[:device_id], customoid_oid: resource[:oid]).entries
+    case entries.size
     when 1
+      @my_properties = entries[0]
       true
     when 0
       false
@@ -40,11 +45,11 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def destroy
-    true
+    @customoids.where(device_id: resource[:device_id], customoid_oid: resource[:oid]).delete
   end
 
   def descr
-    'foobar'
+    @my_properties[:customoid_descr]
   end
 
   def descr=(value)
@@ -52,7 +57,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def oid
-    'foobar'
+    @my_properties[:customoid_oid]
   end
 
   def oid=(value)
@@ -60,7 +65,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def datatype
-    'foobar'
+    @my_properties[:customoid_datatype]
   end
 
   def datatype=(value)
@@ -68,7 +73,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def unit
-    'foobar'
+    @my_properties[:customoid_unit]
   end
 
   def unit=(value)
@@ -76,7 +81,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def divisor
-    'foobar'
+    @my_properties[:customoid_divisor]
   end
 
   def divisor=(value)
@@ -84,7 +89,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def multiplier
-    'foobar'
+    @my_properties[:customoid_multiplier]
   end
 
   def multiplier=(value)
@@ -92,7 +97,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def limit
-    'foobar'
+    @my_properties[:customoid_limit]
   end
 
   def limit=(value)
@@ -100,7 +105,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def limit_warn
-    'foobar'
+    @my_properties[:customoid_limit_warn]
   end
 
   def limit_warn=(value)
@@ -108,7 +113,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def limit_low
-    'foobar'
+    @my_properties[:customoid_limit_low]
   end
 
   def limit_low=(value)
@@ -116,7 +121,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def limit_low_warn
-    'foobar'
+    @my_properties[:customoid_limit_low_warn]
   end
 
   def limit_low_warn=(value)
@@ -124,7 +129,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def alert
-    'foobar'
+    @my_properties[:customoid_alert]
   end
 
   def alert=(value)
@@ -132,6 +137,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def user_func
+    @my_properties[:user_func]
     'foobar'
   end
 
