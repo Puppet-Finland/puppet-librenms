@@ -48,12 +48,18 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
     @customoids.where(device_id: resource[:device_id], customoid_oid: resource[:oid]).delete
   end
 
+  def update_field(field, value)
+    value = 'NULL' if value.nil?
+    change = { field => value }
+    @customoids.where(device_id: resource[:device_id], customoid_oid: resource[:oid]).update(change)
+  end
+
   def descr
     @my_properties[:customoid_descr]
   end
 
   def descr=(value)
-    'foobar'
+    update_field(:customoid_descr, resource[:descr])
   end
 
   def oid
