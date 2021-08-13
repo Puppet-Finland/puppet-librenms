@@ -37,6 +37,11 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
                          customoid_limit_low: resource[:limit_low],
                          customoid_limit_low_warn: resource[:limit_low_warn],
                          customoid_alert: resource[:alert],
+                         # Set 1 here to force LibreNMS to believe that snmpget
+                         # for the OID returns a value. If this is not done
+                         # LibreNMS will not start polling this Custom OID and
+                         # hence will not alert.
+                         customoid_passed: 1,
                          user_func: resource[:user_func])
     rescue Sequel::DatabaseError => e
       puts e.message
