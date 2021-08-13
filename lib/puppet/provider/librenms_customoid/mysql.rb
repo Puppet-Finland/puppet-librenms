@@ -67,7 +67,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def oid=(value)
-    'foobar'
+    update_field(:customoid_oid, resource[:oid])
   end
 
   def datatype
@@ -75,7 +75,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def datatype=(value)
-    'foobar'
+    update_field(:customoid_datatype, resource[:datatype])
   end
 
   def unit
@@ -83,7 +83,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def unit=(value)
-    'foobar'
+    update_field(:customoid_unit, resource[:unit])
   end
 
   def divisor
@@ -91,7 +91,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def divisor=(value)
-    'foobar'
+    update_field(:customoid_divisor, resource[:divisor])
   end
 
   def multiplier
@@ -99,7 +99,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def multiplier=(value)
-    'foobar'
+    update_field(:customoid_multiplier, resource[:multiplier])
   end
 
   def limit
@@ -107,7 +107,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def limit=(value)
-    'foobar'
+    update_field(:customoid_limit, resource[:limit])
   end
 
   def limit_warn
@@ -115,7 +115,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def limit_warn=(value)
-    'foobar'
+    update_field(:customoid_limit_warn, resource[:limit_warn])
   end
 
   def limit_low
@@ -123,7 +123,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def limit_low=(value)
-    'foobar'
+    update_field(:customoid_limit_low, resource[:limit_low])
   end
 
   def limit_low_warn
@@ -131,7 +131,7 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def limit_low_warn=(value)
-    'foobar'
+    update_field(:customoid_limit_low_warn, resource[:limit_low_warn])
   end
 
   def alert
@@ -139,15 +139,14 @@ Puppet::Type.type(:librenms_customoid).provide(:mysql) do
   end
 
   def alert=(value)
-    'foobar'
+    update_field(:customoid_alert, resource[:alert])
   end
 
   def user_func
     @my_properties[:user_func]
-    'foobar'
   end
 
   def user_func=(value)
-    'foobar'
+    update_field(:customoid_user_func, resource[:user_func])
   end
 end
