@@ -99,26 +99,34 @@ how to use this with
     $descr = "${service} on ${::fqdn}"
     
     @@librenms_customoid { $descr:
-      ensure    => present,
+      ensure   => present,
       
       # Database username and password: there's no API support for manipulating
       # CustomOIDs
-      username  => 'librenms',
-      password  => 'secret',
+      username => 'librenms',
+      password => 'secret',
       
       # Bind this CustomOID to hostname that matches value of $::fqdn fact
-      hostname  => $::fqdn,
+      hostname => $::fqdn,
       
       # Alternatively use sysName instead for the mapping
       # sysName   => $::hostname,
+       
+      # Turn on alerting for this CustomOID.
+      alert    => 1,
       
-      # Send alerts. We get 0 if service is up, 1 if is down.
-      alert     => 1,
-      descr     => $descr,
-      oid       => $oid,
-      # Alert if service is not up (returns 1)
-      limit     => 1,
-      tag       => 'default'
+      # Human readable description
+      descr    => $descr,
+      
+      # The OID, which matches the service name converted to ASCII.
+      oid      => $oid,
+      
+      # Send critical alert if the service is not up. We get 0 if it is up, 1
+      # otherwise.
+      limit    => 1,
+      
+      # Collect using tags
+      tag      => 'default'
     }
 
 Then just realize the exported resources on the LibreNMS server:
@@ -127,7 +135,7 @@ Then just realize the exported resources on the LibreNMS server:
 
 See
 [lib/puppet/type/librenms_customoid.rb](lib/puppet/type/librenms_customoid.rb)
-for details.
+for documentation of all the available parameters.
 
 # Testing with Vagrant
 
