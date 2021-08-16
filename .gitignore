@@ -25,5 +25,3 @@
 .project
 .envrc
 /inventory.yaml
-*.log
-/modules/
