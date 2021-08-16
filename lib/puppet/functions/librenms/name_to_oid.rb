@@ -7,8 +7,11 @@
 #
 # as far as we know.
 #
-Puppet::Functions.create_function('librenms::name_to_oid') do dispatch :get do
-  param 'String', :name return_type 'String' end
+Puppet::Functions.create_function('librenms::name_to_oid') do
+  dispatch :get do
+    param 'String', :name
+    return_type 'String'
+  end
 
   def get(name)
     oid = String.new
