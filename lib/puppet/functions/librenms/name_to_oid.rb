@@ -9,16 +9,17 @@
 #
 Puppet::Functions.create_function('librenms::name_to_oid') do
   dispatch :get do
-    param 'String', :name
+    required_param 'String', :name
+    required_param 'String', :base_oid
     return_type 'String'
   end
 
-  def get(name)
-    oid = String.new
+  def get(name, base_oid)
+    oid = base_oid.dup
     name.chars.each do |c|
-      oid << c.ord.to_s
       oid << '.'
+      oid << c.ord.to_s
     end
-    oid.delete_suffix!('.')
+    oid
   end
 end
